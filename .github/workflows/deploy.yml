@@ -9,10 +9,6 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: ./astro-blog
-
     steps:
       # 1. Забираем код из репозитория
       - name: Checkout repository
@@ -22,13 +18,14 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 20  # <-- Исправлено здесь
           cache: 'npm'
-          cache-dependency-path: 'astro-blog/package-lock.json' 
+          cache-dependency-path: 'astro-blog/package-lock.json'
 
       # 3. Устанавливаем зависимости и собираем проект
       - name: Install dependencies & Build
         run: |
+          cd astro-blog
           npm ci
           npm run build
 
