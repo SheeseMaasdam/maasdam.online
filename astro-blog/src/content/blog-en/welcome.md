@@ -8,7 +8,7 @@ Hello! This is the first blog post of the **maasdam.online** project.
 
 ## What is maasdam.online?
 
-It's a gaming community by Vladimir "Syr" Maasdam. Several servers are running here for multiplayer fun:
+It's a gaming community by Vladimir "Syr" Maasdam. Several servers are will be running here for multiplayer fun:
 
 - ⛏️ **Minecraft** — survival mode with custom plugins at `mc.maasdam.online`
 - 🌍 **Rimworld** — multiplayer storytelling & survival at `rim.maasdam.online`
