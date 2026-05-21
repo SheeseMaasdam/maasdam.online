@@ -1,0 +1,44 @@
+name: Deploy Astro Site
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Настраиваем Node.js в облаке GitHub
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: 'astro-blog/package-lock.json' 
+
+      # Устанавливаем чистые зависимости и собираем статику внутри astro-blog
+      - name: Install dependencies & Build
+        defaults:
+          run:
+            working-directory: ./astro-blog
+        run: |
+          npm ci
+          npm run build
+
+      # Чистим целевую папку на VDS и заливаем свежий билд
+      - name: Deploy to VDS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          source: "astro-blog/dist/*"
+          target: "/var/www/astro-site"
+          strip_components: 2 
+          rm_target: true
+          overwrite: true
