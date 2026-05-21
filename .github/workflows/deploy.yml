@@ -18,7 +18,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20  # <-- Исправлено здесь
+          node-version: 22  # <-- Исправлено здесь
           cache: 'npm'
           cache-dependency-path: 'astro-blog/package-lock.json'
 
