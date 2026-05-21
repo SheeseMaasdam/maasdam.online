@@ -9,11 +9,16 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: ./astro-blog
+
     steps:
+      # 1. Забираем код из репозитория
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Настраиваем Node.js в облаке GitHub
+      # 2. Настраиваем Node.js в окружении GitHub
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -21,16 +26,13 @@ jobs:
           cache: 'npm'
           cache-dependency-path: 'astro-blog/package-lock.json' 
 
-      # Устанавливаем чистые зависимости и собираем статику внутри astro-blog
+      # 3. Устанавливаем зависимости и собираем проект
       - name: Install dependencies & Build
-        defaults:
-          run:
-            working-directory: ./astro-blog
         run: |
           npm ci
           npm run build
 
-      # Чистим целевую папку на VDS и заливаем свежий билд
+      # 4. Полная очистка папки на VDS и копирование новых файлов
       - name: Deploy to VDS
         uses: appleboy/scp-action@v0.1.7
         with:
