@@ -1,0 +1,18 @@
+---
+import Layout from '../../layouts/BlogPost.astro';
+import { DISCORD_URL } from '../../consts';
+---
+
+<Layout
+	title="About"
+	description="About Vladimir Maasdam's project"
+	pubDate={new Date('2024-01-01')}
+>
+	<p>
+		This is a project by Vladimir "Syr" Maasdam. This is where a project with several gaming ventures begins.
+		Join our Discord server and stay tuned for updates!
+	</p>
+	<p>
+		<a href={DISCORD_URL} target="_blank" rel="noopener noreferrer">👾 Join Discord</a>
+	</p>
+</Layout>

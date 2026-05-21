@@ -1,0 +1,18 @@
+---
+import Layout from '../layouts/BlogPost.astro';
+import { DISCORD_URL } from '../consts';
+---
+
+<Layout
+	title="О нас"
+	description="О проекте Владимира Маасдама"
+	pubDate={new Date('2026-05-21')}
+>
+	<p>
+		Это проект от Владимира «Сыра» Маасдама. Тут начинается проект с несколькими игровыми проектами.
+		Присоединяйтесь к нашему серверу Discord и следите за новостями!
+	</p>
+	<p>
+		<a href={DISCORD_URL} target="_blank" rel="noopener noreferrer">👾 Присоединиться к Discord</a>
+	</p>
+</Layout>

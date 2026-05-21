@@ -1,0 +1,39 @@
+---
+interface Props {
+	name: string;
+	ip: string;
+	port: number;
+	description: string;
+	icon: string;
+	copyBtnText?: string;
+}
+
+const { name, ip, port, description, icon, copyBtnText = 'Copy IP' } = Astro.props;
+const useImageIcon = icon.endsWith('.svg') || icon.endsWith('.png') || icon.startsWith('data:');
+---
+
+<div class="server-card">
+	<div class="server-card-inner">
+		<div class="server-card-icon">
+			{useImageIcon ? <img src={icon} alt={`${name} icon`} /> : icon}
+		</div>
+		<h3>{name}</h3>
+		<p>{description}</p>
+		<div class="ip-address">{ip}</div>
+		<div class="ip-address-alt">maasdam.online:{port}</div>
+
+		<button class="copy-btn" onclick={`navigator.clipboard.writeText('${ip}').then(() => alert('✓ Copied: ${ip}'))`}>
+			{copyBtnText}
+		</button>
+	</div>
+</div>
+
+<style>
+	.ip-address-alt {
+		font-size: 11px;
+		color: rgb(100, 100, 100);
+		font-family: "Courier New", monospace;
+		margin-top: 2px;
+		font-style: italic;
+	}
+</style>

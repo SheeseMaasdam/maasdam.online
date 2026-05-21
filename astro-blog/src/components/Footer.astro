@@ -1,0 +1,94 @@
+---
+import { DISCORD_URL, CONTACT_EMAIL } from '../consts';
+
+const pathname = Astro.url.pathname;
+const isEnglish = pathname.startsWith('/en');
+const today = new Date();
+
+const noCookies = isEnglish ? 'We do not use cookies. (Probably...)' : 'Мы не используем cookies. (Вроде бы...)';
+const contactLabel = isEnglish ? 'Contact' : 'Контакты';
+const rightsLabel = isEnglish
+	? `© ${today.getFullYear()} Maasdam Gaming Community. All rights reserved.`
+	: `© ${today.getFullYear()} Maasdam Gaming Community. Все права защищены.`;
+---
+
+<footer>
+	<div class="footer-content">
+		<p>{rightsLabel}</p>
+		<p>
+			Server IPs:
+			<strong>mc.maasdam.online</strong> |
+			<strong>rim.maasdam.online</strong>
+		</p>
+		<p class="no-cookies">{noCookies}</p>
+		<div class="footer-links">
+			<a href={DISCORD_URL} target="_blank" rel="noopener noreferrer" class="footer-link discord-link">
+				<svg viewBox="0 0 16 16" aria-hidden="true" width="16" height="16">
+					<path fill="currentColor" d="M13.545 2.907a13.227 13.227 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.194 12.194 0 0 0-3.658 0 8.413 8.413 0 0 0-.412-.833.051.051 0 0 0-.052-.025c-1.125.194-2.22.584-3.257 1.011a.041.041 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032c.001.014.01.028.021.037a13.276 13.276 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019c.308-.42.582-.863.818-1.329a.05.05 0 0 0-.01-.059.051.051 0 0 0-.018-.011 8.875 8.875 0 0 1-1.248-.595.05.05 0 0 1-.02-.066.051.051 0 0 1 .015-.034c.084-.063.168-.129.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.052.052 0 0 1 .051.007c.08.066.164.132.248.195a.051.051 0 0 1-.004.085 8.254 8.254 0 0 1-1.249.594.05.05 0 0 0-.03.03.052.052 0 0 0 .003.041c.24.465.511.909.817 1.329a.05.05 0 0 0 .056.019 13.235 13.235 0 0 0 4.001-2.02.049.049 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.034.034 0 0 0-.02-.019Zm-8.198 7.307c-.789 0-1.438-.724-1.438-1.612 0-.889.637-1.613 1.438-1.613.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612Zm5.316 0c-.788 0-1.438-.724-1.438-1.612 0-.889.637-1.613 1.438-1.613.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612Z"/>
+				</svg>
+				Discord
+			</a>
+			<span class="footer-sep">|</span>
+			<a href={`mailto:${CONTACT_EMAIL}`} class="footer-link">{contactLabel}: {CONTACT_EMAIL}</a>
+		</div>
+	</div>
+</footer>
+
+<style>
+	footer {
+		padding: 6px;
+		background: rgb(var(--gray));
+		color: rgb(0, 0, 0);
+		text-align: center;
+		border-top: 2px solid rgb(var(--win95-shadow));
+		border-left: 2px solid rgb(var(--win95-highlight));
+		border-right: 2px solid rgb(var(--win95-shadow));
+		border-bottom: 2px solid rgb(var(--win95-highlight));
+		font-size: 11px;
+		font-family: "MS Sans Serif", Arial, sans-serif;
+	}
+	footer p {
+		margin: 2px 0;
+		font-size: 11px;
+	}
+	footer strong {
+		color: rgb(0, 0, 128);
+		font-weight: bold;
+	}
+	.footer-content {
+		max-width: 720px;
+		margin: 0 auto;
+		padding: 2px;
+	}
+	.no-cookies {
+		font-style: italic;
+		color: rgb(100, 100, 100);
+		margin-top: 4px !important;
+	}
+	.footer-links {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 8px;
+		margin-top: 6px;
+		flex-wrap: wrap;
+	}
+	.footer-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 4px;
+		text-decoration: underline;
+		color: #0000aa;
+		font-size: 11px;
+		font-family: "MS Sans Serif", Arial, sans-serif;
+		padding: 2px 6px;
+		border: 1px solid transparent;
+	}
+	.footer-link:hover {
+		background: rgb(var(--gray-light));
+		border: 1px solid rgb(var(--gray-dark));
+	}
+	.footer-sep {
+		color: rgb(var(--gray-dark));
+	}
+</style>
