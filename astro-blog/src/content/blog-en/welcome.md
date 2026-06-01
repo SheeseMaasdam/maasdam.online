@@ -1,7 +1,7 @@
 ---
 title: 'Welcome to maasdam.online!'
 description: 'First news of the project!'
-pubDate: '2025-05-21'
+pubDate: '2026-05-21'
 ---
 
 Hello! This is the first blog post of the **maasdam.online** project.
