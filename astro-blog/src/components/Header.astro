@@ -148,12 +148,23 @@ const toggleLink = getToggleLink();
 		border: 1px solid rgb(var(--gray-light));
 		background: rgb(var(--gray-light));
 	}
-	@media (max-width: 720px) {
-		.internal-links {
-			display: none;
-		}
-		.lang-switcher {
-			display: none;
-		}
+@media (max-width: 720px) {
+	nav {
+		flex-wrap: wrap;
+		gap: 8px;
 	}
+
+	.internal-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 4px;
+		width: 100%;
+		justify-content: center;
+	}
+
+	.lang-switcher {
+		display: flex;
+		margin-left: auto;
+	}
+}
 </style>
