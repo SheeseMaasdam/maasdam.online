@@ -1,7 +1,7 @@
 ---
 title: 'Games on maasdam.online'
 description: 'About our game servers'
-pubDate: '2025-06-01'
+pubDate: '2026-06-01'
 ---
 
 Hello! Vladimir "Cheese" Maasdam here. Today I'd like to tell you about our game servers and how you can join them.
