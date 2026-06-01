@@ -1,6 +1,6 @@
 ---
 title: 'Игры на maasdam.online'
-description: 'О игровых серверахю'
+description: 'О игровых серверах'
 pubDate: '2025-06-01'
 ---
 
