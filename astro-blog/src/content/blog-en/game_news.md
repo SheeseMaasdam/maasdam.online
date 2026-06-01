@@ -20,9 +20,9 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=3572429738
 
 The unique feature of this mod is that all players share the same planet. You can trade with other colonies, form alliances, and interact with other players. Saves are stored on the server, and everyone plays under the same storyteller: Randy Random.
 
-![LoginScreen](/src/assets/mod_log_rim.jpg)
+![LoginScreen](../../assets/mod_log_rim.jpg)
 
-![TradeScreen](/src/assets/mod_show_rim.jpg)
+![LoginScreen](../../assets/mod_show_rim.jpg)
 
 To connect, use:
 
@@ -42,9 +42,9 @@ To join the server, you must first join our Discord server and be added to the w
 
 At launch, the server will support up to 50 players. If performance remains stable, the player limit will be increased.
 
-![Spawn](/src/assets/spawn_mine.jpg)
+![LoginScreen](../../assets/spawn_mine.jpg)
 
-![Horizon](/src/assets/horizon_mine.jpg)
+![LoginScreen](../../assets/horizon_mine.jpg)
 
 You will be able to connect using:
 
