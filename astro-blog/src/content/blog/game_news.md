@@ -14,9 +14,10 @@ pubDate: '2025-06-01'
 
 Из особенности мода то, что все игроки играют на одной планете, имеют возможность торговать вместе и создавать союзы, но сохранения хранятся на сервере и у всех один рассказчик Ренди случай. 
 
-![LoginScreen](astro-blog/src/assets/mod_log_rim.jpg)
+![LoginScreen](/src/assets/mod_log_rim.jpg)
 
-![TradeScreen](astro-blog/src/assets/mod_show_rim.jpg)
+![TradeScreen](/src/assets/mod_show_rim.jpg)
+
 
 Для подключения, используйте адресс maasdam.online:30010. Если игра зависнет, это нормально. Включённый впн может создать большие задержки синхронизации сервера. Сервер находится в Москве, так что в случае подключении из России подключение должно быть хорошим.
 
@@ -25,9 +26,9 @@ pubDate: '2025-06-01'
 Я готовлю сервер по майнкрафт на основе модификации Sanctuary. (https://www.reddit.com/r/Minecraft/comments/1spy655/sanctuary_a_minecraft_worldgen_mod_where_you/) 
 Этот мод для minecraft версии 1.21.11 изменяет генерацию, создавая летающие острова вместо обычной генерации. Для подключения нужно присоедениться в наш Discord сервер и попасть в вайтлист. На старте сервера будет только 50 слотов, при хорошей производительности количество слотов будет увеличено.
 
-![TradeScreen](astro-blog/src/assets/spawn_mine.jpg)
+![TradeScreen](src/assets/spawn_mine.jpg)
 
-![TradeScreen](astro-blog/src/assets/horizon_mine.jpg)
+![TradeScreen](src/assets/horizon_mine.jpg)
 
 Для подключения вы сможете подключиться по адресу mc.maasdam.online или maasdam.online:30002. Вы можете скачать мод Simple Voice Mod, если вы хотите пользоваться голосовым чатом.
 
