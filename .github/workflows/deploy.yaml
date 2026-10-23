@@ -31,11 +31,19 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Prepare site files
-        # Копируем только то, что нужно сайту (без .git, .DS_Store, __MACOSX и т.п.)
+        # Ищем папку, где лежит index.html (корень репозитория или подпапка, например site/),
+        # и копируем только нужные сайту файлы (без .git, .DS_Store, __MACOSX и т.п.)
         run: |
+          INDEX=$(find . -name index.html -not -path './.git/*' -not -path './_site/*' -not -path '*/__MACOSX/*' | head -n 1)
+          if [ -z "$INDEX" ]; then
+            echo "::error::index.html не найден в репозитории"
+            exit 1
+          fi
+          SRC=$(dirname "$INDEX")
+          echo "Папка сайта: $SRC"
           mkdir _site
-          cp index.html style.css script.js _site/
-          cp -r assets _site/assets
+          cp "$SRC/index.html" "$SRC/style.css" "$SRC/script.js" _site/
+          cp -r "$SRC/assets" _site/assets
           find _site -name '.DS_Store' -delete
 
       - name: Setup Pages
