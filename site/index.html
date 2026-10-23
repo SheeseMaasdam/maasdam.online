@@ -1,0 +1,344 @@
+<!doctype html>
+
+<!--
+  ============================================================================
+  maasdam.online — сайт-визитка в виде рабочего стола Windows 98
+  ============================================================================
+  Сайт состоит из четырёх частей:
+    index.html                  — этот файл: разметка страницы (окна, ярлыки, панель задач)
+    style.css                   — все стили
+    script.js                   — вся логика
+    assets/                     — картинки и данные фона (background.svg, background-holes.js, logo.png, discord.svg)
+
+  Структура этого файла:
+    1. <head>   — метаданные страницы и подключение стилей (style.css)
+    2. <body>   — разметка:
+                    • фоновый холст <canvas id="bg"> (анимация «живого сыра» по assets/background.svg)
+                    • спрятанный SVG со значками (symbol)
+                    • ярлыки рабочего стола (#icons)
+                    • окна (.win): «Обо мне», Minecraft, Discord, Telegram, «Контакты», Pong, «Предупреждение»
+                    • меню «Пуск» (#start) и панель задач (#bar)
+    3. внизу — подключение скриптов (assets/background-holes.js и script.js), а в script.js вся логика:
+                    • словарь переводов RU/EN
+                    • управление окнами (открыть / свернуть / развернуть / закрыть / перетащить)
+                    • панель задач, меню «Пуск», часы, копирование в буфер обмена
+                    • анимированный фон (лава-лампа из «дыр» сыра)
+                    • мини-игра Pong
+
+  Служебные data-атрибуты в разметке:
+    data-open="id"  — у ярлыка: какое окно он открывает
+    data-t="ключ"   — у элемента: ключ строки в словаре переводов T (текст подставляется скриптом)
+    data-act="..."  — у кнопки окна: действие (min — свернуть, max — развернуть, close — закрыть)
+    data-copy="..." — у кнопки: текст, который копируется в буфер обмена
+    data-icon       — у окна: значок в заголовке берётся у ярлыка с таким же data-open
+  ============================================================================
+-->
+<html lang="ru">
+
+<head>
+  <!-- Кодировка документа -->
+  <meta charset="utf-8">
+  <!-- Адаптивность: ширина = ширине экрана; viewport-fit=cover — учитывать «чёлку» на телефонах -->
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <!-- Заголовок вкладки браузера -->
+  <title>maasdam.online</title>
+  <!-- Описание страницы для поисковиков и превью ссылок -->
+  <meta name="description" content="Владимир «Сыр» Маасдам — визитка и игровые проекты">
+  <!-- Значок вкладки (favicon) -->
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- ========================================================================
+       ФОН: холст для анимации «живой сыр» (рисуется скриптом, см. bgInit/bgDraw; дырки берутся из assets/background-holes.js)
+       ======================================================================== -->
+  <canvas id="bg" aria-hidden="true"></canvas>
+
+  <!-- ========================================================================
+       СПРЯТАННЫЙ SVG-НАБОР ЗНАЧКОВ (размер 0×0, на экране не виден).
+       Значки описаны один раз как <symbol> и подключаются через <use href="#id">
+       ======================================================================== -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+
+    <!-- Значок «Блокнот»: лист с серой шапкой и строками текста -->
+    <symbol id="i-note" viewBox="0 0 32 32">
+      <rect x="5.5" y="3.5" width="21" height="26" fill="#fff" stroke="#000" />
+      <path d="M9 11h14M9 15h14M9 19h14M9 23h8" stroke="#000080" stroke-width="2" />
+      <path d="M5.5 3.5h21v4h-21z" fill="#808080" stroke="#000" />
+    </symbol>
+
+    <!-- Значок «Контакты»: конверт -->
+    <symbol id="i-mail" viewBox="0 0 32 32">
+      <rect x="3.5" y="7.5" width="25" height="17" fill="#fff" stroke="#000" />
+      <path d="M3.5 7.5L16 18 28.5 7.5M3.5 24.5l9-9M28.5 24.5l-9-9" fill="none" stroke="#000" />
+    </symbol>
+
+    <!-- Значок Pong: чёрный экран, пунктир посередине, две ракетки и мяч -->
+    <symbol id="i-pong" viewBox="0 0 32 32">
+      <rect x="3.5" y="5.5" width="25" height="21" fill="#000" stroke="#808080" />
+      <path d="M16 7v18" stroke="#fff" stroke-dasharray="2 2" />
+      <path d="M7 11h2v8H7zM23 13h2v8h-2zM15 15h2v2h-2z" fill="#fff" />
+    </symbol>
+
+    <!-- Значок Telegram: голубой круг с белым «бумажным самолётиком» -->
+    <symbol id="i-tg" viewBox="0 0 32 32">
+      <circle cx="16" cy="16" r="13.5" fill="#2aabee" stroke="#000" />
+      <path d="M7 15.5l18-7-4 15.5-6-4.5-3 3v-5.5l8-7-10.5 6.5z" fill="#fff" />
+    </symbol>
+  </svg>
+
+
+  <!-- ========================================================================
+       ЯРЛЫКИ РАБОЧЕГО СТОЛА
+       Двойной клик (или тап на телефоне, Enter/пробел с клавиатуры) открывает окно с id из data-open.
+       Те же ярлыки скрипт копирует в меню «Пуск».
+       data-t — ключ перевода подписи (если ключа нет — подпись не переводится)
+       ======================================================================== -->
+  <nav id="icons" aria-label="Рабочий стол">
+
+    <!-- «Обо мне» -> окно #about -->
+    <button class="icon" data-open="about">
+      <span class="ic"><svg><use href="#i-note" /></svg></span>
+      <span data-t="iAbout">Обо мне</span>
+    </button>
+
+    <!-- Minecraft -> окно #mc (значок — эмодзи) -->
+    <button class="icon" data-open="mc">
+      <span class="ic">⛏️</span>
+      <span>Minecraft</span>
+    </button>
+
+    <!-- Discord -> окно #dc (значок — картинка assets/discord.svg) -->
+    <button class="icon" data-open="dc">
+      <span class="ic"><img src="assets/discord.svg" alt=""></span>
+      <span>Discord</span>
+    </button>
+
+    <!-- Telegram -> окно #tg -->
+    <button class="icon" data-open="tg">
+      <span class="ic"><svg><use href="#i-tg" /></svg></span>
+      <span>Telegram</span>
+    </button>
+
+    <!-- «Контакты» -> окно #mail -->
+    <button class="icon" data-open="mail">
+      <span class="ic"><svg><use href="#i-mail" /></svg></span>
+      <span data-t="iMail">Контакты</span>
+    </button>
+
+    <!-- Pong -> окно #pong -->
+    <button class="icon" data-open="pong">
+      <span class="ic"><svg><use href="#i-pong" /></svg></span>
+      <span>Pong</span>
+    </button>
+  </nav>
+
+
+  <!-- ========================================================================
+       ОКНА
+       Устройство каждого окна одинаковое:
+         <section class="win raised" id="...">
+           <header class="tb">  — заголовок: .ti значок, .tt название, .tbb кнопки управления
+           <div class="body">   — содержимое
+       Окна скрыты, пока скрипт не добавит класс .open
+       ======================================================================== -->
+
+  <!-- Окно «Обо мне» (оформлено как Блокнот) -->
+  <section class="win raised" id="about" data-icon>
+    <header class="tb">
+      <span class="ti"></span> <!-- значок подставляет скрипт (копия значка ярлыка) -->
+      <span class="tt" data-t="tAbout">Обо мне.txt — Блокнот</span>
+      <span class="tbb">
+        <button data-act="min">_</button> <!-- свернуть -->
+        <button data-act="max">□</button> <!-- развернуть / вернуть -->
+        <button data-act="close">×</button> <!-- закрыть -->
+      </span>
+    </header>
+    <div class="body">
+      <!-- «Лист» с логотипом, заголовком и описанием проекта -->
+      <div class="doc sunken">
+        <img src="assets/logo.png" width="48" height="48" alt="">
+        <h1>maasdam.online</h1>
+        <p data-t="aboutTxt">Это проект от Владимира «Сыра» Маасдама. Тут начинается проект с несколькими игровыми проектами. Присоединяйтесь к нашему серверу Discord и следите за новостями!</p>
+        <p class="small" data-t="cookies">Мы не используем cookies. (Вроде бы...)</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Окно Minecraft: адрес сервера и кнопка перехода в Discord -->
+  <section class="win raised" id="mc" data-icon>
+    <header class="tb">
+      <span class="ti"></span>
+      <span class="tt">Minecraft</span>
+      <span class="tbb">
+        <button data-act="min">_</button>
+        <button data-act="max">□</button>
+        <button data-act="close">×</button>
+      </span>
+    </header>
+    <div class="body">
+      <p data-t="mcDesc">Режим выживания с пользовательскими плагинами.</p>
+      <h4 style="margin: 0;" data-t="mcDesc2">Давай, вошли и вышли. Приключение на 20 минут.</h4>
+      <!-- Адрес сервера + кнопка «Копировать» (текст для копирования — в data-copy) -->
+      <div class="lbl" data-t="addr">Адрес сервера:</div>
+      <div class="row">
+        <input readonly value="mc.maasdam.online">
+        <button class="btn" data-copy="mc.maasdam.online" data-t="copy">Копировать</button>
+      </div>
+
+      <!-- Адрес сервера с портом -->
+      <div class="lbl" data-t="addrP">Адрес с портом:</div>
+      <div class="row">
+        <input readonly value="maasdam.online:30002">
+        <button class="btn" data-copy="maasdam.online:30002" data-t="copy">Копировать</button>
+      </div>
+
+      <!-- Жёлтая подсказка -->
+      <div class="note" data-t="files">Все файлы для игры находятся в нашем Discord!</div>
+
+      <!-- Ссылка на Discord-сервер (открывается в новой вкладке) -->
+      <a class="btn" href="https://discord.gg/FZrCXCAJts" target="_blank" rel="noopener noreferrer" data-t="openDc">Открыть Discord</a>
+    </div>
+  </section>
+
+  <!-- Окно Discord: приглашение на сервер -->
+  <section class="win raised" id="dc" data-icon>
+    <header class="tb">
+      <span class="ti"></span>
+      <span class="tt">Discord</span>
+      <span class="tbb">
+        <button data-act="min">_</button>
+        <button data-act="max">□</button>
+        <button data-act="close">×</button>
+      </span>
+    </header>
+    <div class="body">
+      <p data-t="dcTxt">Наш сервер: общение, новости и все файлы для игры.</p>
+      <div class="row">
+        <input readonly value="discord.gg/FZrCXCAJts">
+      </div>
+      <a class="btn" href="https://discord.gg/FZrCXCAJts" target="_blank" rel="noopener noreferrer" data-t="openDc">Открыть Discord</a>
+    </div>
+  </section>
+
+  <!-- Окно Telegram: ссылка на канал -->
+  <section class="win raised" id="tg" data-icon>
+    <header class="tb">
+      <span class="ti"></span>
+      <span class="tt">Telegram</span>
+      <span class="tbb">
+        <button data-act="min">_</button>
+        <button data-act="max">□</button>
+        <button data-act="close">×</button>
+      </span>
+    </header>
+    <div class="body">
+      <p data-t="tgTxt">Мой телеграм-канал: новости и заметки.</p>
+      <div class="row">
+        <input readonly value="t.me/Cheese_Maasdam_Channel">
+      </div>
+      <a class="btn" href="https://t.me/Cheese_Maasdam_Channel" target="_blank" rel="noopener noreferrer" data-t="openTg">Открыть Telegram</a>
+    </div>
+  </section>
+
+  <!-- Окно «Контакты»: почта для связи и сотрудничества -->
+  <section class="win raised" id="mail" data-icon>
+    <header class="tb">
+      <span class="ti"></span>
+      <span class="tt" data-t="iMail">Контакты</span>
+      <span class="tbb">
+        <button data-act="min">_</button>
+        <button data-act="max">□</button>
+        <button data-act="close">×</button>
+      </span>
+    </header>
+    <div class="body">
+      <p data-t="mailTxt">Для связи и сотрудничества:</p>
+      <div class="row">
+        <input readonly value="maasdam_business@internet.ru">
+        <button class="btn" data-copy="maasdam_business@internet.ru" data-t="copy">Копировать</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Окно Pong: игровое поле (холст 400×240), кнопки ▲▼ и подсказка по управлению.
+       Игра рисуется и считается скриптом (см. раздел «Pong» ниже) -->
+  <section class="win raised" id="pong" data-icon>
+    <header class="tb">
+      <span class="ti"></span>
+      <span class="tt">Pong</span>
+      <span class="tbb">
+        <button data-act="min">_</button>
+        <button data-act="max">□</button>
+        <button data-act="close">×</button>
+      </span>
+    </header>
+    <div class="body">
+      <canvas id="pc" width="400" height="240"></canvas>
+      <!-- Кнопки для телефонов: вверх (#pu) и вниз (#pd) -->
+      <div class="pad">
+        <button class="btn" id="pu">▲</button>
+        <button class="btn" id="pd">▼</button>
+      </div>
+      <p class="small center" data-t="pongHint">Управление: W/S, ↑/↓, кнопки ниже или палец по полю. До 7 очков.</p>
+    </div>
+  </section>
+
+  <!-- Окно «Предупреждение»: при загрузке открыто ТОЛЬКО оно (остальные окна открывает сам посетитель), сразу активное (класс act).
+       Как настоящая системная ошибка, оно не закрывается насовсем: после × / OK / Esc скрипт возвращает его
+       через 0,8 сек (см. ERR_DELAY и respawnErr в script.js).
+       data-icon у него нет, поэтому значок в заголовке задан прямо здесь (⚠️);
+       кнопки свернуть/развернуть отсутствуют — только закрыть -->
+  <section class="win raised act" id="err">
+    <header class="tb">
+      <span class="ti">⚠️</span>
+      <span class="tt" data-t="warn">Предупреждение</span>
+      <span class="tbb"><button data-act="close">×</button></span>
+    </header>
+    <div class="body">
+      <div class="msg"><i>⚠️</i><span data-t="wip">Сайт и весь проект находится в разработке.</span></div>
+      <div class="center"><button class="btn" style="min-width:90px" data-act="close">OK</button></div>
+    </div>
+  </section>
+  
+  <!-- ========================================================================
+       МЕНЮ «ПУСК» (по умолчанию скрыто атрибутом hidden).
+       .items заполняется скриптом: туда копируются все ярлыки рабочего стола
+       ======================================================================== -->
+  
+  <div id="start" class="raised" hidden>
+    <div class="side">maasdam.online</div>
+    <div class="items"></div>
+  </div>
+
+  <!-- ========================================================================
+       ПАНЕЛЬ ЗАДАЧ (внизу экрана)
+       ======================================================================== -->
+  
+  <footer id="bar">
+    <!-- Кнопка «Пуск» -->
+    <button id="sbtn">
+      <img src="assets/logo.png" alt="">
+      <span data-t="start">Пуск</span>
+    </button>
+
+    <!-- Сюда скрипт добавляет кнопки открытых окон (см. функцию tasks) -->
+    <div id="tasks"></div>
+
+    <!-- Системный трей: кнопка смены языка и часы -->
+    <div id="tray" class="sunken">
+      <button id="lang">ENG</button>
+      <span id="clock"></span>
+    </div>
+  </footer>
+  
+  <!-- ========================================================================
+       СКРИПТЫ. Порядок важен: сначала данные фона (создают window.CHEESE), затем script.js — вся логика сайта
+       (обёрнута в самовызывающуюся функцию, чтобы переменные не попадали в глобальную область)
+       ======================================================================== -->
+<script src="assets/background-holes.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

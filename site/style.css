@@ -1,0 +1,658 @@
+
+    /* ==========================================================================
+       ОБЩИЕ НАСТРОЙКИ И «ВИНДОВЫЕ» ЭЛЕМЕНТЫ
+       ========================================================================== */
+
+    /* Переменные цветов, используемые по всему файлу */
+    :root {
+      --g: #c0c0c0;      /* классический серый цвет Windows 98: фон окон и кнопок */
+      --navy: #000080;   /* тёмно-синий: заголовки окон, выделение */
+    }
+
+    /* Размеры элементов считаются вместе с padding и border */
+    * {
+      box-sizing: border-box;
+    }
+
+    /* Атрибут hidden всегда прячет элемент, даже если у него задан display (например, у #start) */
+    [hidden] {
+      display: none !important;
+    }
+
+    /* Страница занимает всю высоту экрана и без внешних отступов */
+    html,
+    body {
+      margin: 0;
+      height: 100%;
+    }
+
+    /* Основа страницы: «рабочий стол» без прокрутки */
+    body {
+      background: #fede6f url("assets/background.svg") 0 0 / max(560px, min(100vw, 100vh)) auto;   /* «сырный» фон: виден, пока не отрисовался холст (или если он не заработал). Размер плитки тот же, что у холста (см. bgInit в script.js) */
+      touch-action: manipulation;               /* отключает зум двойным тапом на телефонах */
+      overscroll-behavior: none;                /* убирает «резиновую» прокрутку на краях */
+      overflow: hidden;                         /* страница не скроллится — всё живёт в окнах */
+      color: #000;                              /* чёрный текст по умолчанию */
+      font: 13px/1.4 "MS Sans Serif", Tahoma, "Segoe UI", Arial, sans-serif;   /* шрифты в стиле Windows: размер 13px, межстрочный интервал 1.4 */
+      user-select: none;                        /* текст на «рабочем столе» не выделяется... */
+      -webkit-user-select: none;                /* ...(то же для Safari) */
+      -webkit-tap-highlight-color: transparent; /* без серой подсветки при касании на iOS/Android */
+    }
+
+    /* «Выпуклая» рамка (окна, кнопки): тёмные тени справа-снизу, светлые — слева-сверху */
+    .raised {
+      background: var(--g);
+      box-shadow:
+        inset -1px -1px #000,
+        inset 1px 1px #fff,
+        inset -2px -2px #808080,
+        inset 2px 2px #dfdfdf;
+    }
+
+    /* «Вдавленная» рамка (поля ввода, область документа): тени наоборот */
+    .sunken {
+      box-shadow:
+        inset 1px 1px #808080,
+        inset -1px -1px #fff,
+        inset 2px 2px #000,
+        inset -2px -2px #dfdfdf;
+    }
+
+    /* Кнопки и поля ввода наследуют шрифт страницы (по умолчанию браузер ставит свой) */
+    button,
+    .btn,
+    input {
+      font: inherit;
+      color: #000;
+    }
+
+    /* Общий вид всех кнопок: серый фон, «выпуклая» рамка, курсор — сырный клин из assets/cursor.png (горячая точка — левый верхний угол;
+       путь указан от style.css; если картинка не загрузилась — обычная рука), без подчёркивания (для ссылок-кнопок) */
+    .btn,
+    .tbtn,
+    #sbtn,
+    #lang,
+    .items button,
+    .tbb button {
+      cursor: url('assets/cursor.cur') 0 0, pointer;
+      background: var(--g);
+      border: 0;
+      box-shadow:
+        inset -1px -1px #000,
+        inset 1px 1px #fff,
+        inset -2px -2px #808080,
+        inset 2px 2px #dfdfdf;
+      text-decoration: none;
+    }
+
+    /* Кнопка-ссылка внутри окон: содержимое по центру, минимальная высота, без переноса текста */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 30px;
+      padding: 4px 14px;
+      white-space: nowrap;
+      cursor: url("assets/cursor.cur") 0 0, pointer;
+    }
+
+    /* «Нажатое» состояние: инвертированные тени и сдвиг текста на 1px вниз.
+       .tbtn.on — активное окно на панели задач, #sbtn.on — открытое меню «Пуск» */
+    .btn:active,
+    .tbtn.on,
+    #sbtn.on {
+      box-shadow:
+        inset 1px 1px #000,
+        inset -1px -1px #fff,
+        inset 2px 2px #808080,
+        inset -2px -2px #dfdfdf;
+      padding-top: 5px;
+    }
+
+    /* Рамка фокуса при навигации с клавиатуры: пунктир внутри элемента, как в Windows */
+    :focus-visible {
+      outline: 1px dotted #000;
+      outline-offset: -4px;
+    }
+
+
+    /* ==========================================================================
+       ФОН И ЯРЛЫКИ РАБОЧЕГО СТОЛА
+       ========================================================================== */
+
+    /* Холст с анимацией «живого сыра» — на весь экран, под всеми остальными элементами */
+    #bg {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    /* Контейнер ярлыков: левый верхний угол, над холстом.
+       Колонка, которая переносится в следующий столбец, когда не хватает высоты экрана */
+    #icons {
+      position: absolute;
+      z-index: 1;
+      top: 8px;
+      left: 8px;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      gap: 6px;
+      max-height: calc(100vh - 52px);    /* запасное значение для старых браузеров, не знающих dvh (без него ограничение просто пропало бы) */
+      max-height: calc(100dvh - 52px);   /* высота экрана минус панель задач */
+    }
+
+    /* Один ярлык: значок сверху, подпись снизу.
+       Белый текст с чёрной обводкой (4 тени по диагоналям) — читается на любом фоне */
+    .icon {
+      width: 86px;
+      background: none;
+      border: 0;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 4px;
+      cursor: url('assets/cursor.cur') 0 0, pointer;
+      font-size: 12px;
+      text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    /* Контейнер значка: квадрат 40×40, содержимое по центру; font-size — для значков-эмодзи */
+    .ic {
+      display: grid;
+      place-items: center;
+      width: 40px;
+      height: 40px;
+      font-size: 32px;
+      line-height: 1;
+    }
+
+    /* Картинки и SVG-значки: 36×36, без сглаживания (чёткие «пиксели») */
+    .ic svg,
+    .ic img {
+      width: 36px;
+      height: 36px;
+      image-rendering: pixelated;
+    }
+
+    /* Подпись ярлыка (последний span): небольшие отступы, чтобы фон выделения не прилегал к тексту */
+    .icon span:last-child {
+      padding: 1px 3px;
+    }
+
+    /* Выделенный ярлык: подпись на синем фоне с жёлтой пунктирной рамкой */
+    .icon.sel span:last-child {
+      background: var(--navy);
+      outline: 1px dotted #ff0;
+    }
+
+
+    /* ==========================================================================
+       ОКНА
+       ========================================================================== */
+
+    /* Окно: по умолчанию скрыто. Позиционируется абсолютно (left/top задаёт скрипт).
+       Ширина 400px, но не шире экрана; высота — не больше экрана минус панель задач.
+       dvh — «динамическая» высота экрана (учитывает адресную строку на телефонах) */
+    .win {
+      position: absolute;
+      display: none;
+      flex-direction: column;
+      width: 400px;
+      max-width: calc(100vw - 8px);
+      max-height: calc(100vh - 48px - env(safe-area-inset-bottom));    /* запасное значение для браузеров без dvh; env — «безопасная зона» iPhone, панель задач выше на её высоту */
+      max-height: calc(100dvh - 48px - env(safe-area-inset-bottom));
+      padding: 3px;   /* место под «выпуклую» рамку */
+    }
+
+    /* Открытое окно показываем; свёрнутое (.min) снова скрываем.
+       Правила одинаковой силы — побеждает то, что ниже, поэтому порядок важен */
+    .win.open {
+      display: flex;
+    }
+
+    .win.min {
+      display: none;
+    }
+
+    /* Индивидуальная ширина некоторых окон: «Обо мне» и «Предупреждение» */
+    #about {
+      width: 460px;
+    }
+
+    #err {
+      width: 330px;
+    }
+
+    /* Заголовок окна (title bar): синий градиент, белый жирный текст.
+       touch-action: none — чтобы касание заголовка двигало окно, а не прокручивало страницу */
+    .tb {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 3px 3px 4px;
+      color: #fff;
+      font-weight: bold;
+      background: linear-gradient(90deg, var(--navy), #1084d0);
+      touch-action: none;
+      cursor: default;
+    }
+
+    /* Заголовок неактивного окна — серый градиент (у активного окна есть класс .act) */
+    .win:not(.act) .tb {
+      background: linear-gradient(90deg, #808080, #b5b5b5);
+    }
+
+    /* Значок в заголовке окна: 16×16 */
+    .ti {
+      display: grid;
+      width: 16px;
+      height: 16px;
+      font-size: 14px;
+      line-height: 1;
+      place-items: center;
+    }
+
+    .ti svg,
+    .ti img {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* Текст заголовка: занимает всё свободное место, в одну строку, длинный — с многоточием */
+    .tt {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Группа кнопок управления окном (свернуть / развернуть / закрыть) */
+    .tbb {
+      display: flex;
+      gap: 2px;
+    }
+
+    .tbb button {
+      width: 20px;
+      height: 18px;
+      padding: 0;
+      font-size: 12px;
+      line-height: 1;
+      font-weight: bold;
+    }
+
+    /* Нажатая кнопка управления окном (только тени, без сдвига текста) */
+    .tbb button:active {
+      box-shadow: inset 1px 1px #000, inset -1px -1px #fff;
+    }
+
+    /* Содержимое окна: отступы, прокрутка при переполнении, занимает остаток высоты.
+       Текст внутри окон разрешено выделять (в отличие от остального сайта) */
+    .body {
+      padding: 10px;
+      overflow: auto;
+      flex: 1;
+      user-select: text;
+      -webkit-user-select: text;
+    }
+
+    /* Развёрнутое окно: на весь экран, кроме панели задач.
+       !important нужен, чтобы перебить позицию (left/top), которую скрипт записывает в style окна */
+    .win.max {
+      left: 0 !important;
+      top: 0 !important;
+      width: 100vw;
+      max-width: none;
+      height: calc(100vh - 40px - env(safe-area-inset-bottom));    /* запасное значение для браузеров без dvh */
+      height: calc(100dvh - 40px - env(safe-area-inset-bottom));   /* минус панель задач (на iPhone она выше на «безопасную зону») */
+      max-height: none;
+    }
+
+    /* «Лист» блокнота в окне «Обо мне»: белый фон, прокрутка, ограниченная высота */
+    .doc {
+      background: #fff;
+      padding: 12px;
+      overflow: auto;
+      max-height: 55vh;
+    }
+
+    .doc h1 {
+      font-size: 18px;
+      margin: 0 0 8px;
+    }
+
+    /* Логотип обтекается текстом: прижат влево */
+    .doc img {
+      float: left;
+      margin: 0 12px 4px 0;
+    }
+
+    /* Мелкий серый текст (примечания) */
+    .small {
+      font-size: 11px;
+      color: #444;
+    }
+
+    /* Абзацы: отступ снизу */
+    p {
+      margin: 0 0 10px;
+    }
+
+    /* Подпись над полем ввода */
+    .lbl {
+      margin: 6px 0 3px;
+    }
+
+    /* Строка «поле ввода + кнопка Копировать» */
+    .row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    /* Кнопка в строке не меняет ширину, когда надпись «Копировать» на секунду сменяется на «✓ Скопировано!»
+       (иначе поле ввода рядом дёргалось бы) */
+    .row .btn {
+      min-width: 10.5em;
+    }
+
+    /* Поле ввода (только для чтения — из него копируют адрес): растягивается,
+       min-width: 0 позволяет ему сжиматься в flex-строке; моноширинный шрифт */
+    input {
+      flex: 1;
+      min-width: 0;
+      background: #fff;
+      border: 0;
+      padding: 5px 6px;
+      font: 13px "Courier New", monospace;
+      user-select: text;
+      -webkit-user-select: text;
+    }
+
+    /* Жёлтая «подсказка» в стиле Windows (#ffffe1) с чёрной рамкой */
+    .note {
+      background: #ffffe1;
+      border: 1px solid #000;
+      padding: 6px 8px;
+      margin: 10px 0;
+    }
+
+    /* Сообщение в окне предупреждения: большой значок слева и текст справа */
+    .msg {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .msg i {
+      font-size: 34px;
+      font-style: normal;   /* тег i используется как контейнер значка, а не как курсив */
+    }
+
+    /* Выравнивание по центру */
+    .center {
+      text-align: center;
+    }
+
+    /* Окно игры Pong чуть шире обычного */
+    #pong {
+      width: 410px;
+    }
+
+    /* Игровое поле Pong: на всю ширину окна, чёрное, «пиксельное».
+       touch-action: none — палец двигает ракетку, а не прокручивает страницу.
+       border-color задаётся по сторонам (сверху, справа, снизу, слева) — получается «вдавленная» рамка */
+    #pc {
+      display: block;
+      width: 100%;
+      height: auto;
+      background: #000;
+      image-rendering: pixelated;
+      touch-action: none;
+      border: 2px solid;
+      border-color: #808080 #fff #fff #808080;
+    }
+
+    /* Ряд кнопок управления ▲ ▼ под полем Pong (для телефонов) */
+    .pad {
+      display: flex;
+      gap: 8px;
+      margin: 8px 0;
+    }
+
+    /* Крупные кнопки: растягиваются поровну, без выделения текста и системного меню при долгом нажатии */
+    .pad .btn {
+      flex: 1;
+      min-height: 44px;
+      font-size: 20px;
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+    }
+
+
+    /* ==========================================================================
+       ПАНЕЛЬ ЗАДАЧ, КНОПКА «ПУСК» И МЕНЮ
+       ========================================================================== */
+
+    /* Панель задач: прижата к низу экрана поверх окон (z-index 9999).
+       padding снизу учитывает «безопасную зону» (полоса жестов на iPhone) */
+    #bar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      min-height: 36px;
+      padding: 3px 3px calc(3px + env(safe-area-inset-bottom));
+      z-index: 9999;
+      background: var(--g);                                /* серый фон панели */
+      box-shadow: inset 0 1px #dfdfdf, inset 0 2px #fff;   /* светлая линия по верхней кромке */
+    }
+
+    /* Кнопка «Пуск»: логотип + подпись */
+    #sbtn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      min-height: 28px;
+      padding: 2px 8px;
+      font-weight: bold;
+      cursor: url('assets/cursor-bar.cur') 0 25, crosshair;
+    }
+
+    #sbtn img {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* Контейнер кнопок открытых окон: занимает всё свободное место на панели; min-width: 0 позволяет сжиматься */
+    #tasks {
+      flex: 1;
+      display: flex;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    /* Кнопка окна на панели задач: ширина до 150px, при нехватке места сжимается, длинный текст — с многоточием */
+    .tbtn {
+      flex: 0 1 150px;
+      min-width: 0;
+      min-height: 28px;
+      padding: 2px 8px;
+      text-align: left;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      cursor: url('assets/cursor-bar.cur') 0 25, crosshair;
+    }
+
+    /* Кнопка активного окна: жирный шрифт и «шахматный» фон 2×2 пикселя (классический эффект Windows 98) */
+    .tbtn.on {
+      font-weight: bold;
+      background: repeating-conic-gradient(#c0c0c0 0 25%, #fff 0 50%) 0 0/2px 2px;
+    }
+
+    /* Системный трей справа: кнопка языка и часы, «вдавленный» вид */
+    #tray {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 28px;
+      padding: 2px 10px;
+    }
+
+    /* Кнопка переключения языка RU/EN */
+    #lang {
+      padding: 1px 6px;
+      min-height: 22px;
+      font-size: 11px;
+      cursor: url('assets/cursor-bar.cur') 0 25, crosshair;
+    }
+
+    /* Меню «Пуск»: появляется над панелью задач слева; поверх всего (z-index 10000).
+       Внутри — синяя вертикальная полоса и список пунктов */
+    #start {
+      position: fixed;
+      left: 3px;
+      bottom: calc(40px + env(safe-area-inset-bottom));
+      width: 210px;
+      display: flex;
+      z-index: 10000;
+      padding: 3px;
+    }
+
+    /* Синяя вертикальная полоса с названием сайта.
+       writing-mode + rotate(180deg) — текст читается снизу вверх, как в Windows 98 */
+    #start .side {
+      width: 26px;
+      background: linear-gradient(0deg, var(--navy), #1084d0);
+      color: #fff;
+      font-weight: bold;
+      font-size: 17px;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      padding: 8px 4px;
+      text-align: right;
+      letter-spacing: 1px;
+    }
+
+    /* Список пунктов меню — колонкой */
+    .items {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Пункт меню: значок + подпись; рамка кнопки убрана (box-shadow: none) */
+    .items button {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 10px;
+      box-shadow: none;
+      text-align: left;
+      font-size: 13px;
+      min-height: 40px;
+    }
+
+    /* При наведении пункт подсвечивается синим */
+    .items button:hover {
+      background: var(--navy);
+      color: #fff;
+    }
+
+    /* Значки в меню «Пуск» чуть меньше, чем на рабочем столе */
+    .items .ic {
+      width: 28px;
+      height: 28px;
+      font-size: 22px;
+    }
+
+    .items .ic svg,
+    .items .ic img {
+      width: 26px;
+      height: 26px;
+    }
+
+
+    /* ==========================================================================
+       АДАПТИВНОСТЬ
+       ========================================================================== */
+
+    /* Узкие экраны (телефоны, ширина до 640px) */
+    @media(max-width:640px) {
+
+      /* Ярлыки — сеткой в 3 колонки на всю ширину экрана */
+      #icons {
+        right: 8px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        max-height: none;
+      }
+
+      .icon {
+        width: auto;
+      }
+
+      /* Окна — на всю ширину экрана, сразу под ярлыками.
+         Переменная --wt (отступ сверху) нигде в CSS не объявлена: её во время работы страницы задаёт скрипт
+         в функции lay(); 170px — запасное значение, пока скрипт её не задал.
+         Комментарии «noinspection» ниже отключают предупреждение WebStorm «Unresolved custom property»
+         (IDE не видит, что переменную создаёт скрипт); на работу сайта они не влияют.
+         !important перебивает позицию (left/top), которую скрипт мог записать окну на широком экране
+         (например, если окно открыли на десктопе, а потом экран сузили) */
+      .win {
+        left: 8px !important;
+        right: 8px;
+        /*noinspection CssUnresolvedCustomProperty*/
+        top: var(--wt, 170px) !important;
+        width: auto !important;
+        /*noinspection CssUnresolvedCustomProperty*/
+        max-height: calc(100vh - var(--wt, 170px) - 48px - env(safe-area-inset-bottom));    /* запасное значение для браузеров без dvh */
+        max-height: calc(100dvh - var(--wt, 170px) - 48px - env(safe-area-inset-bottom));
+      }
+
+      /* На телефоне кнопку «развернуть» прячем (окно и так почти на весь экран), кнопки задач — уже */
+      .tbb [data-act=max] {
+        display: none;
+      }
+
+      .tbtn {
+        flex-basis: 90px;
+      }
+
+      /* Часы на узком экране скрыты — не хватает места */
+      #tray #clock {
+        display: none;
+      }
+    }
+
+    /* Сенсорные экраны (основной указатель — палец): всё делаем крупнее */
+    @media(pointer:coarse) {
+      .tbb button {
+        width: 30px;
+        height: 26px;
+        font-size: 15px;
+      }
+
+      /* Шрифт полей 16px — иначе iOS приближает страницу при фокусе на поле */
+      input {
+        font-size: 16px;
+      }
+
+      .btn {
+        min-height: 38px;
+      }
+    }
