@@ -85,7 +85,7 @@
           iFolder: 'New Folder',
           tAbout: 'About.txt - Notepad',
           aboutTxt: 'This is a small project by Vladimir “Syir” Maasdam and a self‑taught developer who is also his best friend,' +
-              ' Evgeny (Dusty). + '/n' + 'Several game projects originate here, under the guidance of absolute amateurs who love to have fun.' + '/n' +
+              ' Evgeny (Dusty).' + '/n' + 'Several game projects originate here, under the guidance of absolute amateurs who love to have fun.' + '/n' +
               ' Join our Discord server and stay up to date with the news!!',
           cookies: 'We do not use cookies. (Probably...)',
           mcDesc: 'Survival mode with custom plugins.',
@@ -416,7 +416,7 @@
                     ' You gazed upon the endless halls of folders, so that at the end of the journey you might attain the all‑encompassing and all‑consuming NOTHING.' +
                     ' For it is said: “Pride precedes the fall, and an arrogant spirit leads to ruin.”' +
                     ' Now you need white chambers, a sulfazine cross, and the mercy of healers to heal your mind.' + '\n' +
-                    '\n' + 'Hi there from the second developer (: + '\n' +
+                    '\n' + 'Hi there from the second developer (:' + '\n' +
                     'You can write your feedback about this exciting attraction to the email: vtoroy-razrab@maasdam.online'}},
             i => ({ ru: 'Новая папка ('+ i +')', en: 'New folder ('+ i +')' }))
         ]
