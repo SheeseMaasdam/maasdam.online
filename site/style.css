@@ -710,10 +710,10 @@
 /* Ссылки (почта, телефон) внутри текстового файла: синие, подчёркнутые, с курсором-сыром */
 .doc a { color: #0000ee; text-decoration: underline; cursor: url('assets/cursor.cur') 0 0, pointer; }
 .doc a:active { color: #ff0000; }
-/* Не выделять текст у значков внутри папок и кнопки вверх */
+/* Не выделять текст у значков внутри папок и у кнопки «Вверх» */
 .fgrid,
 .fi,
 .ftool .btn {
-    user-select: none;
-    -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
