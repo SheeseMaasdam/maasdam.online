@@ -411,15 +411,13 @@
                     'дабы исцелить разум свой.\n' + '\n' +
                     'Приветик от второго разраба (:\n' +
                     'Можете написать свой отзыв об этом увлекательном аттракционе на почту: vtoroy-razrab@maasdam.online'
-                    + '\n' + 'или позвонить по номеру +7 (926) 930-08-19' + '\n' + 'и сказать все лично',
                 en: 'Oh, you, man possessed and befuddled in mind, who in your pride thought you had found the truth and walked the path of great madness.' +
                     ' You gazed upon the endless halls of folders, so that at the end of the journey you might attain the all‑encompassing and all‑consuming NOTHING.' +
                     ' For it is said: “Pride precedes the fall, and an arrogant spirit leads to ruin.”' +
                     ' Now you need white chambers, a sulfazine cross, and the mercy of healers to heal your mind.' + '\n' +
                     '\n' +
                     'Hi there from the second developer (:\n' +
-                    'You can write your feedback about this exciting attraction to the email: vtoroy-razrab@maasdam.online' + '\n' + 'or call +7 (926) 930-08-19' +
-                    ' and tell us everything in person.' } },
+                    'You can write your feedback about this exciting attraction to the email: vtoroy-razrab@maasdam.online'
             i => ({ ru: 'Новая папка ('+ i +')', en: 'New folder ('+ i +')' }))
         ]
       };
