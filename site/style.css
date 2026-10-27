@@ -95,7 +95,7 @@
       white-space: nowrap;
       cursor: url("assets/cursor.cur") 0 0, pointer;
     }
-    
+
     /* «Нажатое» состояние: инвертированные тени и сдвиг текста на 1px вниз.
        .tbtn.on — активное окно на панели задач, #sbtn.on — открытое меню «Пуск» */
     .btn:active,
