@@ -711,9 +711,22 @@
 .doc a { color: #0000ee; text-decoration: underline; cursor: url('assets/cursor.cur') 0 0, pointer; }
 .doc a:active { color: #ff0000; }
 
+/* Не выделять текст у кнопок и у значков внутри папок (Chrome, Edge, Firefox, Safari) */
+button,
+.btn,
 .fgrid,
-.fi,
+.fgrid *,
 .ftool .btn {
-  user-select: none;
   -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Запасной вариант: даже если выделение каким-то образом случится, оно не будет видно */
+.fgrid ::selection,
+.ftool .btn::selection,
+.ftool .btn ::selection {
+  background: transparent;
+  color: inherit;
 }
