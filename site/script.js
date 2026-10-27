@@ -453,7 +453,7 @@
         $('.tt', w).textContent = nm(node.name);
         const names = w._path.map(n => nm(n.name));
         $('.faddr', w).textContent = (names.length > 3 ? '…\\' : '') + names.slice(-3).join('\\');
-        const u = $('.fup', w); u.textContent = '⬆ ' + t('up'); u.disabled = w._path.length < 2;
+        const u = $('.fup', w); u.textContent = '⬆️ ' + t('up'); u.disabled = w._path.length < 2;
         // значки внутри папки
         grid.textContent = '';
         const list = typeof node.items === 'function' ? node.items() : (node.items || []);
