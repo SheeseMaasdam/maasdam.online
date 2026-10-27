@@ -417,7 +417,7 @@
                     ' For it is said: “Pride precedes the fall, and an arrogant spirit leads to ruin.”' +
                     ' Now you need white chambers, a sulfazine cross, and the mercy of healers to heal your mind.' + '\n' +
                     '\n' + 'Hi there from the second developer (: + '\n' +
-                    'You can write your feedback about this exciting attraction to the email: vtoroy-razrab@maasdam.online',
+                    'You can write your feedback about this exciting attraction to the email: vtoroy-razrab@maasdam.online'}},
             i => ({ ru: 'Новая папка ('+ i +')', en: 'New folder ('+ i +')' }))
         ]
       };
