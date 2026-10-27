@@ -30,8 +30,8 @@
           tAbout: 'Обо мне.txt — Блокнот',
           // описание проекта в окне «Обо мне»
           aboutTxt: 'Это небольшой проект от Владимира «Сыра» Маасдама и разраба-самоучки,' +
-              ' по совместительству его лучшего друга, Евгения (Дасти).' + '/n' +
-              ' Здесь берут начало несколько игровых проектов, под руководством абсолютнейших дилетантов, любящих угарать.' + '/n' + 
+              ' по совместительству его лучшего друга, Евгения (Дасти).' + '\n' +
+              ' Здесь берут начало несколько игровых проектов, под руководством абсолютнейших дилетантов, любящих угарать.' + '\n' + 
               ' Присоединяйтесь к нашему серверу Discord и следите за новостями!',
           // примечание про cookies
           cookies: 'Мы не используем cookies. (Вроде бы...)',
@@ -85,7 +85,7 @@
           iFolder: 'New Folder',
           tAbout: 'About.txt - Notepad',
           aboutTxt: 'This is a small project by Vladimir “Syir” Maasdam and a self‑taught developer who is also his best friend,' +
-              ' Evgeny (Dusty).' + '/n' + 'Several game projects originate here, under the guidance of absolute amateurs who love to have fun.' + '/n' +
+              ' Evgeny (Dusty).' + '\n' + 'Several game projects originate here, under the guidance of absolute amateurs who love to have fun.' + '\n' +
               ' Join our Discord server and stay up to date with the news!!',
           cookies: 'We do not use cookies. (Probably...)',
           mcDesc: 'Survival mode with custom plugins.',
