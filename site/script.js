@@ -23,11 +23,11 @@
           // кнопка «Пуск»
           start: 'Пуск',
           // подписи ярлыков: «Обо мне» и «Контакты»
-          iAbout: 'Обо мнас',
+          iAbout: 'О нас',
           iMail: 'Контакты',
           iFolder: 'Новая папка',
           // заголовок окна «Обо мне»
-          tAbout: 'Обо мне.txt — Блокнот',
+          tAbout: 'О нас.txt — Блокнот',
           // описание проекта в окне «Обо мне»
           aboutTxt: 'Это небольшой проект от Владимира «Сыра» Маасдама и разраба-самоучки,' +
               ' по совместительству его лучшего друга, Евгения (Дасти).' + '\n' +
@@ -85,7 +85,7 @@
           iFolder: 'New Folder',
           tAbout: 'About.txt - Notepad',
           aboutTxt: 'This is a small project by Vladimir “Syir” Maasdam and a self‑taught developer who is also his best friend,' +
-              ' Evgeny (Dusty).' + '\n' + 'Several game projects originate here, under the guidance of absolute amateurs who love to have fun.' + '\n' +
+              ' Evgeny (Dasty).' + '\n' + 'Several game projects originate here, under the guidance of absolute amateurs who love to have fun.' + '\n' +
               ' Join our Discord server and stay up to date with the news!!',
           cookies: 'We do not use cookies. (Probably...)',
           mcDesc: 'Survival mode with custom plugins.',
@@ -402,7 +402,7 @@
         name: { ru: 'Новая папка', en: 'New folder' },
         items: [
           // Пример: 5 вложенных папок, в самой глубокой лежит текстовый файл. Число 5 и содержимое файла — ваши
-          chain(1000,
+          chain(1,
             { name: { ru: 'Секрет.txt', en: 'Secret.txt' }, 
               text: { ru: 'О, ты, муж одержимый и помраченный рассудком, кто в гордыне своей мнил,' +
                     'что познал истину, и прошел стезю великого безумия. Ты взирал на бесконечные чертоги папок,' +
