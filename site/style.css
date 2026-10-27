@@ -95,7 +95,7 @@
       white-space: nowrap;
       cursor: url("assets/cursor.cur") 0 0, pointer;
     }
-
+    
     /* «Нажатое» состояние: инвертированные тени и сдвиг текста на 1px вниз.
        .tbtn.on — активное окно на панели задач, #sbtn.on — открытое меню «Пуск» */
     .btn:active,
@@ -362,7 +362,6 @@
     .row .btn {
       min-width: 10.5em;
     }
-
     /* Поле ввода (только для чтения — из него копируют адрес): растягивается,
        min-width: 0 позволяет ему сжиматься в flex-строке; моноширинный шрифт */
     input {
@@ -656,3 +655,58 @@
         min-height: 38px;
       }
     }
+
+    /* ==========================================================================
+       ОКНА-ПАПКИ (создаются скриптом, см. раздел «ПАПКИ» в script.js)
+       ========================================================================== */
+
+    /* Белое «вдавленное» поле, в котором лежат значки папок; переносятся на следующую строку */
+    .fgrid {
+      display: flex;
+      flex-wrap: wrap;
+      align-content: flex-start;
+      gap: 6px;
+      min-height: 140px;
+      padding: 8px;
+      background: #fff;
+    }
+
+    /* Значок внутри папки: как ярлык рабочего стола, но на белом фоне — чёрный текст без обводки */
+    .fi {
+      width: 86px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 4px;
+      background: none;
+      border: 0;
+      color: #000;
+      font-size: 12px;
+      line-height: 1.2;
+      text-align: center;
+      cursor: url('assets/cursor.cur') 0 0, pointer;
+    }
+
+    .fi .ic svg { width: 36px; height: 36px; image-rendering: pixelated; }
+    .fi span:last-child { padding: 1px 3px; overflow-wrap: anywhere; }
+
+    /* Выделенный значок — как на рабочем столе: синий фон подписи и жёлтая пунктирная рамка */
+    .fi.sel span:last-child {
+      background: var(--navy);
+      color: #fff;
+      outline: 1px dotted #ff0;
+    }
+
+/* Панель проводника: кнопка «Вверх» и адресная строка с путём */
+.ftool { display: flex; gap: 6px; margin-bottom: 6px; }
+.ftool .btn { min-height: 28px; padding: 2px 10px; }
+.btn:disabled { color: #808080; text-shadow: 1px 1px #fff; cursor: default; }
+.faddr { flex: 1; min-width: 0; padding: 5px 6px; background: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; user-select: text; -webkit-user-select: text; }
+
+/* Текст .txt-файла в окне Блокнота: переносы строк из текста сохраняются */
+.doc.txt { white-space: pre-wrap; overflow-wrap: anywhere; min-height: 120px; }
+
+/* Ссылки (почта, телефон) внутри текстового файла: синие, подчёркнутые, с курсором-сыром */
+.doc a { color: #0000ee; text-decoration: underline; cursor: url('assets/cursor.cur') 0 0, pointer; }
+.doc a:active { color: #ff0000; }
