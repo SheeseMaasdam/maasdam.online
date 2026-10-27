@@ -54,6 +54,7 @@
           openTg: 'Открыть Telegram',
           // окно «Контакты»: описание
           mailTxt: 'Для связи и сотрудничества:',
+          // текст кнопки
           mailto: 'Написать',
           // окно предупреждения: заголовок и текст
           warn: 'Предупреждение',
@@ -408,15 +409,14 @@
                     'дабы в конце пути обрести всеобъемлющее и всепоглощающее НИХУЯ.' +
                     ' Ибо сказано: «Гордость предшествует падению, а надменный дух — гибели».' +
                     'Ныне же нуждаешься ты в палатах белых, в кресте сульфазиновом и в милосердии врачевателей,' +
-                    'дабы исцелить разум свой.\n' + '\n' +
-                    'Приветик от второго разраба (:\n' +
+                    'дабы исцелить разум свой.' + '\n' + '\n' +
+                    'Приветик от второго разраба (:' + '\n' +
                     'Можете написать свой отзыв об этом увлекательном аттракционе на почту: vtoroy-razrab@maasdam.online',
                 en: 'Oh, you, man possessed and befuddled in mind, who in your pride thought you had found the truth and walked the path of great madness.' +
                     ' You gazed upon the endless halls of folders, so that at the end of the journey you might attain the all‑encompassing and all‑consuming NOTHING.' +
                     ' For it is said: “Pride precedes the fall, and an arrogant spirit leads to ruin.”' +
                     ' Now you need white chambers, a sulfazine cross, and the mercy of healers to heal your mind.' + '\n' +
-                    '\n' +
-                    'Hi there from the second developer (:\n' +
+                    '\n' + 'Hi there from the second developer (: + '\n' +
                     'You can write your feedback about this exciting attraction to the email: vtoroy-razrab@maasdam.online',
             i => ({ ru: 'Новая папка ('+ i +')', en: 'New folder ('+ i +')' }))
         ]
