@@ -696,8 +696,6 @@
       background: var(--navy);
       color: #fff;
       outline: 1px dotted #ff0;
-      user-select: none;
-      webkit-user-select: none;
     }
 
 /* Панель проводника: кнопка «Вверх» и адресная строка с путём */
@@ -713,7 +711,7 @@
 .doc a { color: #0000ee; text-decoration: underline; cursor: url('assets/cursor.cur') 0 0, pointer; }
 .doc a:active { color: #ff0000; }
 /* Не выделять текст у значков внутри папок и кнопки вверх */
-.frigid,
+.fgrid,
 .fi,
 .ftool .btn{
     user-select: none;
