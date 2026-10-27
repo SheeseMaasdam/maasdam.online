@@ -100,7 +100,7 @@
           tgTxt: 'My Telegram channel: news and notes.',
           openTg: 'Open Telegram',
           mailTxt: 'For contact and collaboration:',
-          mailto: 'Write',
+          mailto: 'Mail to',
           warn: 'Warning',
           wip: 'The site and the entire project are under development.',
           aMin: 'Minimize',
