@@ -54,6 +54,7 @@
           openTg: 'Открыть Telegram',
           // окно «Контакты»: описание
           mailTxt: 'Для связи и сотрудничества:',
+          mailto: 'Написать',
           // окно предупреждения: заголовок и текст
           warn: 'Предупреждение',
           wip: 'Сайт и весь проект находятся в разработке.',
@@ -98,6 +99,7 @@
           tgTxt: 'My Telegram channel: news and notes.',
           openTg: 'Open Telegram',
           mailTxt: 'For contact and collaboration:',
+          mailto: 'Write',
           warn: 'Warning',
           wip: 'The site and the entire project are under development.',
           aMin: 'Minimize',
