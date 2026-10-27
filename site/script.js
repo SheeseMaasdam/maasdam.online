@@ -29,10 +29,7 @@
           // заголовок окна «Обо мне»
           tAbout: 'Обо мне.txt — Блокнот',
           // описание проекта в окне «Обо мне»
-          aboutTxt: 'Это небольшой проект от Владимира «Сыра» Маасдама и разраба-самоучки,' +
-              ' по совместительству его лучшего друга, Евгения (Дасти).' + '\n' +
-              ' Здесь берут начало несколько игровых проектов, под руководством абсолютнейших дилетантов, любящих угарать.' + '\n' + 
-              ' Присоединяйтесь к нашему серверу Discord и следите за новостями!',
+          aboutTxt: 'Это проект от Владимира «Сыра» Маасдама. Тут начинается проект с несколькими игровыми проектами. Присоединяйтесь к нашему серверу Discord и следите за новостями!',
           // примечание про cookies
           cookies: 'Мы не используем cookies. (Вроде бы...)',
           // окно Minecraft: описание, подписи полей адреса
@@ -54,8 +51,6 @@
           openTg: 'Открыть Telegram',
           // окно «Контакты»: описание
           mailTxt: 'Для связи и сотрудничества:',
-          // текст кнопки
-          mailto: 'Написать',
           // окно предупреждения: заголовок и текст
           warn: 'Предупреждение',
           wip: 'Сайт и весь проект находятся в разработке.',
@@ -84,9 +79,7 @@
           iMail: 'Contacts',
           iFolder: 'New Folder',
           tAbout: 'About.txt - Notepad',
-          aboutTxt: 'This is a small project by Vladimir “Syir” Maasdam and a self‑taught developer who is also his best friend,' +
-              ' Evgeny (Dusty).' + '\n' + 'Several game projects originate here, under the guidance of absolute amateurs who love to have fun.' + '\n' +
-              ' Join our Discord server and stay up to date with the news!!',
+          aboutTxt: 'This is a project by Vladimir "Syr" Maasdam. This is where a project with several gaming ventures begins. Join our Discord server and stay tuned for updates!',
           cookies: 'We do not use cookies. (Probably...)',
           mcDesc: 'Survival mode with custom plugins.',
           mcDesc2: 'Come on, went in and came out. Twenty minute adventure.',
@@ -100,7 +93,6 @@
           tgTxt: 'My Telegram channel: news and notes.',
           openTg: 'Open Telegram',
           mailTxt: 'For contact and collaboration:',
-          mailto: 'Write',
           warn: 'Warning',
           wip: 'The site and the entire project are under development.',
           aMin: 'Minimize',
@@ -402,22 +394,18 @@
         name: { ru: 'Новая папка', en: 'New folder' },
         items: [
           // Пример: 5 вложенных папок, в самой глубокой лежит текстовый файл. Число 5 и содержимое файла — ваши
-          chain(1000,
+          chain(1,
             { name: { ru: 'Секрет.txt', en: 'Secret.txt' }, 
               text: { ru: 'О, ты, муж одержимый и помраченный рассудком, кто в гордыне своей мнил,' +
                     'что познал истину, и прошел стезю великого безумия. Ты взирал на бесконечные чертоги папок,' +
                     'дабы в конце пути обрести всеобъемлющее и всепоглощающее НИХУЯ.' +
                     ' Ибо сказано: «Гордость предшествует падению, а надменный дух — гибели».' +
                     'Ныне же нуждаешься ты в палатах белых, в кресте сульфазиновом и в милосердии врачевателей,' +
-                    'дабы исцелить разум свой.' + '\n' + '\n' +
-                    'Приветик от второго разраба (:' + '\n' +
-                    'Можете написать свой отзыв об этом увлекательном аттракционе на почту: vtoroy-razrab@maasdam.online',
-                en: 'Oh, you, man possessed and befuddled in mind, who in your pride thought you had found the truth and walked the path of great madness.' +
-                    ' You gazed upon the endless halls of folders, so that at the end of the journey you might attain the all‑encompassing and all‑consuming NOTHING.' +
-                    ' For it is said: “Pride precedes the fall, and an arrogant spirit leads to ruin.”' +
-                    ' Now you need white chambers, a sulfazine cross, and the mercy of healers to heal your mind.' + '\n' +
-                    '\n' + 'Hi there from the second developer (:' + '\n' +
-                    'You can write your feedback about this exciting attraction to the email: vtoroy-razrab@maasdam.online'}},
+                    'дабы исцелить разум твой.\n' + '\n' +
+                    'Приветик от второго разраба (:\n' +
+                    'Можете написать свой отзыв об этом увлекательном аттракционе на почту: vtoroy-razrab@maasdam.online'
+                    + '\n' + 'или позвонить по номеру +7 (926) 930-08-19' + '\n' + 'и сказать все лично',
+                en: 'You made it to the end! Write anything you like here.' } },
             i => ({ ru: 'Новая папка ('+ i +')', en: 'New folder ('+ i +')' }))
         ]
       };
@@ -453,7 +441,7 @@
         $('.tt', w).textContent = nm(node.name);
         const names = w._path.map(n => nm(n.name));
         $('.faddr', w).textContent = (names.length > 3 ? '…\\' : '') + names.slice(-3).join('\\');
-        const u = $('.fup', w); u.textContent = '⬆️ ' + t('up'); u.disabled = w._path.length < 2;
+        const u = $('.fup', w); u.textContent = '⬆ ' + t('up'); u.disabled = w._path.length < 2;
         // значки внутри папки
         grid.textContent = '';
         const list = typeof node.items === 'function' ? node.items() : (node.items || []);
@@ -472,6 +460,9 @@
         if (!list.length) { const p = document.createElement('p'); p.className = 'small'; p.textContent = t('empty'); grid.append(p) }
         tasks()   // подпись кнопки окна на панели задач
       }
+
+      // Запрет выделения текста у значков папок и кнопки «Вверх» (дополнение к user-select в CSS: работает и там, где CSS не помог)
+      document.addEventListener('selectstart', e => { const n = e.target.nodeType === 1 ? e.target : e.target.parentElement; if (n && n.closest('.fgrid,.ftool .btn')) e.preventDefault() });
 
       // Backspace — «Вверх» в активном окне-проводнике (в полях ввода не мешает)
       document.addEventListener('keydown', e => { if (e.key === 'Backspace' && cur && explorers.includes(cur) && !e.target.closest('input,textarea')) { e.preventDefault(); up(cur) } });
