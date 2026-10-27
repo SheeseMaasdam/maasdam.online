@@ -712,8 +712,8 @@
 .doc a:active { color: #ff0000; }
 
 .fgrid,
-.fi,
-.ftool .btn {
+.fi sel,
+.ftool .btn fup {
   user-select: none;
   -webkit-user-select: none;
   -moz-user-select: none;
