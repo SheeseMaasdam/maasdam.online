@@ -696,6 +696,8 @@
       background: var(--navy);
       color: #fff;
       outline: 1px dotted #ff0;
+      user-select: none;
+      webkit-user-select: none;
     }
 
 /* Панель проводника: кнопка «Вверх» и адресная строка с путём */
