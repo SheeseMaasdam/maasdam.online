@@ -713,7 +713,7 @@
 /* Не выделять текст у значков внутри папок и кнопки вверх */
 .fgrid,
 .fi,
-.ftool .btn{
+.ftool .btn {
     user-select: none;
-    webkit-user-select: none;
+    -webkit-user-select: none;
 }
