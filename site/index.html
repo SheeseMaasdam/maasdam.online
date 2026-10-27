@@ -273,7 +273,7 @@
       <div class="row">
         <input readonly value="maasdam_business@internet.ru">
 <!--        <button class="btn" data-copy="maasdam_business@internet.ru" data-t="copy">Копировать</button>-->
-            <a class="btn" href="mailto:maasdam_business@internet.ru">Написать</a>
+            <a class="btn" href="mailto:maasdam_business@internet.ru" data-t="mailto">Написать</a>
       </div>
     </div>
   </section>
@@ -317,12 +317,12 @@
       <div class="center"><button class="btn" style="min-width:90px" data-act="close">OK</button></div>
     </div>
   </section>
-  
+
   <!-- ========================================================================
        МЕНЮ «ПУСК» (по умолчанию скрыто атрибутом hidden).
        .items заполняется скриптом: туда копируются все ярлыки рабочего стола
        ======================================================================== -->
-  
+
   <div id="start" class="raised" hidden>
     <div class="side">maasdam.online</div>
     <div class="items"></div>
@@ -331,7 +331,7 @@
   <!-- ========================================================================
        ПАНЕЛЬ ЗАДАЧ (внизу экрана)
        ======================================================================== -->
-  
+
   <footer id="bar">
     <!-- Кнопка «Пуск» -->
     <button id="sbtn">
@@ -348,7 +348,7 @@
       <span id="clock"></span>
     </div>
   </footer>
-  
+
   <!-- ========================================================================
        СКРИПТЫ. Порядок важен: сначала данные фона (создают window.CHEESE), затем script.js — вся логика сайта
        (обёрнута в самовызывающуюся функцию, чтобы переменные не попадали в глобальную область)
