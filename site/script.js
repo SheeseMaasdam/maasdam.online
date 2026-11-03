@@ -72,6 +72,51 @@
           pWin: 'Победа!',
           pLose: 'Поражение',
           pPause: 'Нажмите, чтобы играть',
+          // окно MS-DOS: заголовок, кнопки, подсказка, надписи списка и строки состояния
+          tDos: 'MS-DOS',
+          dosOpen: 'Открыть файл…',
+          dosReset: 'Перезапуск',
+          dosFull: 'На весь экран',
+          dosHint: 'Клавиатура работает внутри экрана DOS (Esc — тоже). Свою игру можно открыть кнопкой «Открыть файл…» (.jsdos). Закрыть окно — кнопка ×.',
+          dosTouch: 'На телефоне нет клавиатуры для ввода текста — есть только кнопки выше. Касание экрана двигает мышь, быстрый тап — клик.',
+          // студия .jsdos (сборка набора из zip)
+          dosStudio: 'Студия .jsdos (собрать из zip)',
+          dosStudioStat: 'Студия: набор .jsdos собирается из zip-архива с игрой',
+          stZip: '1. Zip-архив с игрой',
+          stExe: '2. Что запускать',
+          stCyc: 'Скорость процессора (cycles)',
+          stTest: 'Проверить',
+          stSave: 'Скачать .jsdos',
+          stRead: 'Читаю архив…',
+          stBad: 'Не удалось прочитать архив — это точно zip?',
+          stHave: 'В архиве уже есть папка .jsdos — это готовый набор, собирать ничего не нужно.',
+          stNoExe: 'В архиве нет файлов .exe / .com / .bat — запускать нечего.',
+          stFound: 'Найдено файлов для запуска: {n}. Выберите нужный и нажмите «Проверить».',
+          stBuild: 'Собираю…',
+          stTested: 'Запущено. Чтобы вернуться в студию, выберите «Студия .jsdos» в списке.',
+          stSaved: 'Готово, файл скачан. Положите его в assets/games/ и добавьте строку в DOS_GAMES.',
+          stLibErr: 'Не удалось загрузить библиотеку для работы с zip.',
+          dosMouseOn: 'Мышь: вкл',
+          dosMouseOff: 'Мышь: выкл',
+          // сохранения игры
+          dosSave: 'Сохранить',
+          dosExp: 'В файл',
+          dosImp: 'Из файла…',
+          dosDel: 'Удалить сохранение',
+          svSavedShort: 'Сохранено в кэш браузера',
+          svSaved: 'Сохранение записано в кэш этого браузера. Оно хранится только на этом устройстве и пропадёт, если очистить данные сайта или открыть игру в другом браузере. Чтобы не потерять — кнопка «В файл».',
+          svLoaded: 'Загружено сохранение из кэша этого браузера. Чтобы начать игру с чистого листа — кнопка «Удалить сохранение».',
+          svNone: 'Нечего сохранять: в игре пока нет изменений.',
+          svFile: 'Файл сохранения скачан. Вернуть его в игру можно кнопкой «Из файла…» — в любом браузере и на любом устройстве.',
+          svNoData: 'Сохранения ещё нет — сначала нажмите «Сохранить».',
+          svImported: 'Сохранение из файла загружено в кэш браузера, игра перезапущена.',
+          svDeleted: 'Сохранение удалено из кэша, игра перезапущена с чистого листа.',
+          svConfirm: 'Удалить сохранение этой игры из кэша браузера?',
+          svBad: 'Не удалось прочитать файл: это не файл сохранения.',
+          dosEmpty: 'Командная строка DOS',
+          dosLoading: 'Загрузка эмулятора…',
+          dosRun: 'Эмулятор запущен',
+          dosIdle: 'Эмулятор остановлен',
           empty: 'Папка пуста',
           up: 'Вверх',
           notepad: ' — Блокнот'
@@ -113,6 +158,48 @@
           pWin: 'You win!',
           pLose: 'You lose',
           pPause: 'Click to play',
+          tDos: 'MS-DOS',
+          dosOpen: 'Open file…',
+          dosReset: 'Restart',
+          dosFull: 'Fullscreen',
+          dosHint: 'The keyboard works inside the DOS screen (Esc too). You can open your own game with “Open file…” (.jsdos). To close the window use ×.',
+          dosTouch: 'There is no keyboard for typing text on a phone — only the buttons above. Touching the screen moves the mouse, a quick tap clicks.',
+          dosStudio: 'Studio: make .jsdos from zip',
+          dosStudioStat: 'Studio: builds a .jsdos bundle from a zip with the game',
+          stZip: '1. Zip archive with the game',
+          stExe: '2. What to run',
+          stCyc: 'CPU speed (cycles)',
+          stTest: 'Test',
+          stSave: 'Download .jsdos',
+          stRead: 'Reading the archive…',
+          stBad: 'Could not read the archive — is it really a zip?',
+          stHave: 'The archive already has a .jsdos folder — it is a ready bundle, nothing to build.',
+          stNoExe: 'No .exe / .com / .bat files in the archive — nothing to run.',
+          stFound: 'Files to run found: {n}. Pick one and press “Test”.',
+          stBuild: 'Building…',
+          stTested: 'Running. To come back to the studio, choose “Studio” in the list.',
+          stSaved: 'Done, the file is downloaded. Put it into assets/games/ and add a line to DOS_GAMES.',
+          stLibErr: 'Could not load the zip library.',
+          dosMouseOn: 'Mouse: on',
+          dosMouseOff: 'Mouse: off',
+          dosSave: 'Save',
+          dosExp: 'To file',
+          dosImp: 'From file…',
+          dosDel: 'Delete save',
+          svSavedShort: 'Saved to the browser cache',
+          svSaved: 'The save was written to this browser’s cache. It lives only on this device and will be lost if you clear the site data or open the game in another browser. To keep it safe, use “To file”.',
+          svLoaded: 'A save from this browser’s cache was loaded. To start the game from scratch, use “Delete save”.',
+          svNone: 'Nothing to save: there are no changes in the game yet.',
+          svFile: 'The save file was downloaded. You can put it back with “From file…” — in any browser, on any device.',
+          svNoData: 'There is no save yet — press “Save” first.',
+          svImported: 'The save from the file was loaded into the browser cache, the game was restarted.',
+          svDeleted: 'The save was deleted from the cache, the game restarted from scratch.',
+          svConfirm: 'Delete this game’s save from the browser cache?',
+          svBad: 'Could not read the file: it is not a save file.',
+          dosEmpty: 'DOS command prompt',
+          dosLoading: 'Loading the emulator…',
+          dosRun: 'Emulator is running',
+          dosIdle: 'Emulator is stopped',
           empty: 'This folder is empty',
           up: 'Up',
           notepad: ' - Notepad'
@@ -176,7 +263,7 @@
         // подписи (для скринридеров) и подсказки у кнопок «свернуть / развернуть / закрыть» и ▲ / ▼
         $$('.tbb [data-act]').forEach(b => { const s = t({ min: 'aMin', max: 'aMax', close: 'aClose' }[b.dataset.act]); b.setAttribute('aria-label', s); b.title = s });
         [['pu', 'aUp'], ['pd', 'aDown']].forEach(([id, k]) => { const b = $('#' + id); b.setAttribute('aria-label', t(k)); b.title = t(k) });
-        if (typeof relabelFolders === 'function') relabelFolders(); clk(); tasks(); lay()                                                     // часы, панель задач, отступ окон на мобильном
+        if (typeof relabelFolders === 'function') relabelFolders(); if (typeof relabelDos === 'function') relabelDos(); clk(); tasks(); lay()                                                     // часы, панель задач, отступ окон на мобильном
       }
 
 
@@ -211,7 +298,7 @@
       // окно получит нормальное место, а не окажется в левом верхнем углу под ярлыками.
       // Уже размещённое окно просто возвращаем в границы экрана (его могли закрыть, пока экран был меньше)
       function place(w) {
-        if (small()) return;
+        if (small()) return fit(w);   // на телефоне место задаёт CSS; сдвинутое пальцем окно только возвращаем в экран
         if (w.dataset.p) return fit(w);
         w.dataset.p = 1;
         if (w.id === 'err') {
@@ -225,7 +312,8 @@
       // Вернуть окно w целиком в пределы экрана (над панелью задач). Нужно при уменьшении окна браузера:
       // иначе окна, стоявшие у правого/нижнего края, уезжают за экран. Развёрнутые окна не трогаем
       function fit(w) {
-        if (small() || w.classList.contains('max') || !w.offsetWidth) return;
+        // на узком экране позицию имеют только сдвинутые пальцем окна (.moved); остальные ставит CSS
+        if ((small() && !w.classList.contains('moved')) || w.classList.contains('max') || !w.offsetWidth) return;
         w.style.left = Math.max(0, Math.min(w.offsetLeft, innerWidth - w.offsetWidth)) + 'px';
         w.style.top = Math.max(0, Math.min(w.offsetTop, innerHeight - w.offsetHeight - 40)) + 'px'
       }
@@ -345,7 +433,8 @@
 
 
       // ======================================================================
-      // ПОВЕДЕНИЕ ОКОН: активация, разворот по двойному клику, перетаскивание
+      // ПОВЕДЕНИЕ ОКОН: активация, разворот (кнопка «□», на компьютере ещё двойной клик по заголовку), перетаскивание
+      // (мышью, а на телефоне пальцем за заголовок: окно получает класс .moved)
       // ======================================================================
       function wire(w) {
         // Любое нажатие внутри окна делает его активным
@@ -359,14 +448,22 @@
         // Перетаскивание окна за заголовок (мышь, палец, стилус — через pointer events)
         h.addEventListener('pointerdown', e => {
           // не таскаем: если нажата не основная кнопка мыши (правая кнопка открывала «зависшее» перетаскивание),
-          // нажата кнопка в заголовке, на телефоне или окно развёрнуто
-          if (e.button !== 0 || e.target.closest('button') || small() || w.classList.contains('max')) return;
+          // нажата кнопка в заголовке или окно развёрнуто
+          if (e.button !== 0 || e.target.closest('button') || w.classList.contains('max')) return;
+          // на телефоне окно по умолчанию стоит на месте, которое задаёт CSS; как только его потащили, помечаем классом .moved —
+          // с этого момента CSS не фиксирует позицию (left и top пишем сами), а ширина остаётся «почти на весь экран»
+          if (small()) w.classList.add('moved');
           // dx, dy — смещение точки нажатия относительно левого верхнего угла окна
           const dx = e.clientX - w.offsetLeft, dy = e.clientY - w.offsetTop; h.setPointerCapture(e.pointerId);
           // mv — движение: ставим окно под указатель, но не даём ему целиком уехать за экран: по горизонтали на экране
           // всегда остаётся не меньше 80px окна, по вертикали — не меньше 80px его верхней части (чтобы можно было
           // «поймать» за заголовок); выше верхнего края экрана окно не уходит
-          const mv = ev => { w.style.left = Math.max(80 - w.offsetWidth, Math.min(innerWidth - 80, ev.clientX - dx)) + 'px'; w.style.top = Math.max(0, Math.min(innerHeight - 80, ev.clientY - dy)) + 'px' };
+          // На телефоне окно почти во всю ширину экрана, поэтому по горизонтали оно целиком остаётся на экране (двигается в основном вверх-вниз)
+          const mv = ev => {
+            const x0 = small() ? 0 : 80 - w.offsetWidth, x1 = small() ? Math.max(0, innerWidth - w.offsetWidth) : innerWidth - 80;
+            w.style.left = Math.max(x0, Math.min(x1, ev.clientX - dx)) + 'px';
+            w.style.top = Math.max(0, Math.min(innerHeight - 80, ev.clientY - dy)) + 'px'
+          };
           // up — указатель отпущен ИЛИ касание прервано системой (pointercancel): в обоих случаях браузер снимает «захват»
           // указателя и присылает lostpointercapture. Раньше слушали только pointerup — при отмене касания обработчик
           // движения оставался навсегда, и окно потом следовало за курсором без нажатой кнопки
@@ -559,6 +656,8 @@
       // Клавиша Esc: если открыто меню «Пуск» — закрывает его, иначе закрывает активное окно
       document.addEventListener('keydown', e => {
         if (e.key !== 'Escape') return;
+        // Esc нужен самой DOS-программе (многие игры выходят в меню по Esc) — окно DOS им не закрываем; оно закрывается кнопкой ×
+        if (cur === dosWin && dosFrame) return;
         const s = $('#start');
         if (!s.hidden) { s.hidden = true; $('#sbtn').classList.remove('on') }
         else if (cur) close(cur)
@@ -796,6 +895,387 @@
 
 
       // ======================================================================
+      // MS-DOS: ЭМУЛЯТОР DOS В ОКНЕ (js-dos)
+      // Сам эмулятор работает в <iframe> со страницы assets/jsdos/player.html (там же объяснено, зачем отдельная страница).
+      // Здесь — окно вокруг него: список программ, «Открыть файл…», «Перезапуск», «На весь экран», строка состояния.
+      //
+      // Эмулятор грузится только пока окно открыто (сайт без него не тормозит), при сворачивании окна ставится на паузу,
+      // при закрытии — полностью выгружается (<iframe> удаляется, звук и вычисления прекращаются).
+      //
+      // Как добавить игру или программу:
+      //   1. Положить набор .jsdos (или .zip) в папку assets/games/.
+      //      Набор .jsdos — это обычный zip: файлы игры + файл .jsdos/dosbox.conf внутри (с командами запуска в секции [autoexec]).
+      //      Готовые наборы можно собрать на https://dos.zone/studio или скачать с https://dos.zone
+      //   2. Добавить строку в список DOS_GAMES ниже.
+      // Посетитель может и сам открыть свой файл кнопкой «Открыть файл…» — он не загружается на сервер, работает только у него в браузере.
+      //
+      // ВАЖНО при обновлении игры: браузер посетителя запоминает скачанный набор по его адресу и потом не скачивает заново.
+      // Заменили файл на сервере — поменяйте и адрес в списке: 'assets/games/doom.jsdos?v=2' (v=3 и т.д.).
+      // Сохранения при этом не теряются: они привязаны к адресу без «?v=...».
+      // Сохранения посетителя лежат в кэше его браузера (кнопки «Сохранить», «В файл», «Из файла…» в окне; см. раздел «Сохранения» ниже).
+      // ======================================================================
+
+      // Список программ в выпадающем списке. Первым пунктом всегда идёт «Командная строка DOS» (пустой DOS), его добавлять не нужно.
+      //   name — название (строка или { ru: '...', en: '...' }),  url — путь к набору от корня сайта
+      //   mouse — необязательно: false = игра запускается с выключенной мышью (для игр, где мышь только мешает, например Doom;
+      //           посетитель может включить её кнопкой «Мышь» в окне). По умолчанию мышь включена
+      const DOS_GAMES = [
+        // { name: { ru: 'Название игры', en: 'Game title' }, url: 'assets/games/game.jsdos' },
+        // { name: { ru: 'Doom', en: 'Doom' }, url: 'assets/games/doom.jsdos', mouse: false },   // пример игры без мыши
+      ];
+
+      // Страница с эмулятором
+      const DOS_PLAYER = 'assets/jsdos/player.html';
+
+      // dosWin, dosScreen, dosSel, dosStat, dosFile — окно, место под <iframe>, список программ, строка состояния, скрытое поле выбора файла
+      const dosWin = $('#dos'), dosScreen = $('#dscreen'), dosSel = $('#dsel'), dosStat = $('#dstat'), dosFile = $('#dfile');
+
+      // dosFrame    — <iframe> с эмулятором (null — эмулятор сейчас не запущен);
+      // dosPick     — что выбрано в списке: '0' — пустой DOS, '1', '2'... — номер игры из DOS_GAMES, 'f' — файл с компьютера;
+      // dosBlob     — внутренний адрес (blob:) выбранного с компьютера файла, dosFileName — его имя (показываем в списке);
+      // dosStatKey  — ключ перевода текущей надписи в строке состояния (чтобы перевести её при смене языка);
+      // dosPaused   — эмулятор сейчас на паузе (окно свёрнуто)
+      // dosMouse — мышь включена (true) или не передаётся в игру (false); см. кнопку «Мышь» ниже
+      let dosMouse = true;
+      // dosKey — ключ сохранений текущей игры ('' — сохранений нет); dosFileSize — размер файла с компьютера (входит в ключ);
+      // dosNoted — плашка про кэш уже показывалась в этот сеанс (показываем один раз, чтобы не надоедать)
+      let dosKey = '', dosFileSize = 0, dosNoted = false;
+      let dosFrame = null, dosPick = '0', dosBlob = '', dosFileName = '', dosStatKey = 'dosIdle', dosPaused = false;
+
+      // Надпись в строке состояния по ключу перевода
+      function setStat(k) { dosStatKey = k; dosStat.textContent = t(k) }
+
+      // Заполняет список программ на текущем языке (вызывается и из setLang при смене языка), сохраняя выбранный пункт
+      function relabelDos() {
+        dosSel.textContent = '';
+        const add = (v, label) => { const o = document.createElement('option'); o.value = v; o.textContent = label; dosSel.append(o) };
+        add('0', t('dosEmpty'));
+        DOS_GAMES.forEach((g, i) => add(String(i + 1), nm(g.name)));
+        add('s', t('dosStudio'));
+        if (dosFileName) add('f', '📁 ' + dosFileName);
+        dosSel.value = dosPick;
+        setStat(dosStatKey);
+        stSay(stMsgKey, stMsgN);
+        $('#dmouse').textContent = t(dosMouse ? 'dosMouseOn' : 'dosMouseOff')
+      }
+
+      // Вернуть клавиатурный фокус эмулятору (иначе клавиши после клика по панели окна уходили бы в страницу сайта)
+      function dosFocus() { try { dosFrame.contentWindow.focus() } catch (e) { } }
+
+      // Выгрузить эмулятор: удаляем <iframe> — браузер останавливает всё, что в нём работало (эмулятор, звук)
+      function dosKill() { if (dosFrame) { dosFrame.remove(); dosFrame = null } }
+
+      // Запустить (или перезапустить) выбранную программу в новом <iframe>
+      function dosStart() {
+        dosKill();
+        // Выбрана «Студия»: вместо экрана показываем панель сборки, эмулятор не запускаем
+        showStudio(dosPick === 's');
+        if (dosPick === 's') { setStat('dosStudioStat'); return }
+        // адрес набора: для игры из списка — абсолютный (страница эмулятора лежит в другой папке, относительный не подошёл бы), для файла с компьютера — blob:
+        let url = '';
+        if (dosPick === 'f') url = dosBlob;
+        else if (dosPick !== '0') url = new URL(DOS_GAMES[dosPick - 1].url, location.href).href;
+        const f = document.createElement('iframe');
+        f.title = 'MS-DOS';
+        f.allow = 'fullscreen; autoplay';
+        f.allowFullscreen = true;
+        // Ключ сохранений: для игры из списка — её путь без «?v=...», для файла с компьютера — имя и размер. У «пустого DOS» сохранений нет
+        dosKey = '';
+        if (dosPick === 'f') dosKey = 'file:' + dosFileName + ':' + dosFileSize;
+        else if (dosPick !== '0') dosKey = 'game:' + DOS_GAMES[dosPick - 1].url.split('?')[0];
+        $('#dsaves').hidden = !dosKey;
+        f.src = DOS_PLAYER + (url ? '?url=' + encodeURIComponent(url) + (dosKey ? '&key=' + encodeURIComponent(dosKey) : '') : '');
+        f.onload = () => {
+          setStat('dosRun');
+          // Клик внутри <iframe> не доходит до страницы сайта, поэтому «активным» (наверх, с синим заголовком) окно DOS делаем сами
+          try { f.contentWindow.addEventListener('pointerdown', () => { if (cur !== dosWin) focus(dosWin) }) } catch (e) { }
+          dosFocus()
+        };
+        setStat('dosLoading');
+        dosScreen.append(f);
+        dosFrame = f; dosPaused = false;
+        dosApplyMouse()
+      }
+
+      // Следим за состоянием окна (классы open / min меняют функции open, min и close выше), чтобы не трогать их код:
+      //   открыто — запускаем эмулятор;  закрыто — выгружаем и сбрасываем выбор;  свёрнуто — пауза, развёрнуто обратно — продолжаем
+      new MutationObserver(() => {
+        const isOpen = dosWin.classList.contains('open'), isMin = dosWin.classList.contains('min');
+        // развёрнутость снята (кнопка «□» или закрытие окна) — выходим и из программного полного экрана (.dsoft)
+        // (проверка обязательна: даже «пустое» снятие класса считается изменением атрибута и заново запускало бы этот же наблюдатель — бесконечно)
+        if (dosWin.classList.contains('dsoft') && !dosWin.classList.contains('max')) dosWin.classList.remove('dsoft');
+        if (!isOpen) {
+          // сбрасываем всегда (даже если эмулятор не запущен — например, была открыта студия); все действия безопасно повторять
+          dosKill();
+          if (dosBlob) { URL.revokeObjectURL(dosBlob); dosBlob = '' }
+          dosPick = '0'; dosFileName = ''; dosMouse = true; dosNoted = false;
+          $('#dsaves').hidden = $('#dnote').hidden = true;
+          studioReset(); showStudio(false);
+          relabelDos(); setStat('dosIdle');
+          return
+        }
+        if (!dosFrame) { dosStart(); return }
+        if (isMin !== dosPaused) {
+          dosPaused = isMin;
+          try { dosFrame.contentWindow.dosPause(isMin) } catch (e) { }
+          if (!isMin) dosFocus()
+        }
+      }).observe(dosWin, { attributes: true, attributeFilter: ['class'] });
+
+      // Мышь: когда выключена, <iframe> с эмулятором перестаёт принимать указатель (pointer-events: none) —
+      // движения и клики мыши до игры не доходят (клик по экрану по-прежнему делает окно активным и возвращает клавиатуру игре)
+      function dosApplyMouse() {
+        if (dosFrame) dosFrame.style.pointerEvents = dosMouse ? '' : 'none';
+        $('#dmouse').textContent = t(dosMouse ? 'dosMouseOn' : 'dosMouseOff')
+      }
+      $('#dmouse').onclick = () => { dosMouse = !dosMouse; dosApplyMouse(); dosFocus() };
+
+      // Выбрали другую программу в списке — запускаем её. Мышь включаем, если для игры в DOS_GAMES не указано mouse: false
+      dosSel.onchange = () => {
+        dosPick = dosSel.value;
+        const g = DOS_GAMES[dosPick - 1];
+        dosMouse = !(g && g.mouse === false);
+        dosStart()
+      };
+
+      // «Открыть файл…»: кнопка открывает скрытое поле выбора файла; выбранный .jsdos / .zip запускаем из памяти браузера
+      $('#dopen').onclick = () => dosFile.click();
+      dosFile.onchange = () => {
+        const f = dosFile.files[0];
+        if (!f) return;
+        if (dosBlob) URL.revokeObjectURL(dosBlob);
+        dosBlob = URL.createObjectURL(f); dosFileName = f.name; dosFileSize = f.size; dosPick = 'f';
+        dosFile.value = '';   // чтобы тот же файл можно было выбрать ещё раз
+        dosMouse = true;
+        relabelDos(); dosStart()
+      };
+
+      // «Перезапуск»: та же программа с самого начала
+      $('#dreset').onclick = () => dosStart();
+
+      // «На весь экран». Два способа:
+      //   • компьютер: настоящий полноэкранный режим браузера для <iframe> с эмулятором;
+      //   • телефон / планшет (сенсорный экран) и браузеры без полноэкранного режима (iPhone): «программный» полный экран —
+      //     окно разворачивается на весь экран (как кнопкой «□»), лишнее прячется (класс .dsoft), остаются экран и пульт.
+      //     Настоящий полноэкранный режим тут не годится: он показал бы только эмулятор без экранного пульта, и играть было бы нечем.
+      //     Выйти — кнопка «□» в заголовке окна
+      const fsOk = !!(document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen);
+      $('#dfull').onclick = () => {
+        const f = dosFrame;
+        if (!f) return;
+        const go = f.requestFullscreen || f.webkitRequestFullscreen;
+        if (go && fsOk && !coarse.matches) {
+          const r = go.call(f);
+          // В полноэкранном режиме просим браузер (Chrome, Edge) отдавать Esc странице, а не выходить из полного экрана:
+          // иначе Esc в играх выкидывал бы из полноэкранного режима. Выйти можно, удерживая Esc, или кнопкой браузера
+          if (r && r.then) r.then(() => { try { navigator.keyboard.lock(['Escape']).catch(() => { }) } catch (e) { } }).catch(() => { })
+        } else {
+          const on = !dosWin.classList.contains('dsoft');
+          dosWin.classList.toggle('dsoft', on);
+          dosWin.classList.toggle('max', on)
+        }
+        dosFocus()
+      };
+      // Вышли из полноэкранного режима — отпускаем захват клавиши
+      document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement) { try { navigator.keyboard.unlock() } catch (e) { } } });
+
+      // Экранный пульт (телефоны): пока кнопка зажата, в эмулятор уходит «клавиша нажата», при отпускании — «отпущена».
+      // Эмулятор слушает обычные события клавиатуры своей страницы (keyCode), поэтому отправляем ему такие же события
+      $$('#dpad [data-k]').forEach(b => {
+        const code = +b.dataset.k, loc = +(b.dataset.l || 0);
+        let down = false;
+        const send = type => {
+          try {
+            const w = dosFrame.contentWindow;
+            w.dispatchEvent(new w.KeyboardEvent(type, { keyCode: code, which: code, location: loc, bubbles: true, cancelable: true }))
+          } catch (e) { }
+        };
+        b.addEventListener('pointerdown', e => { e.preventDefault(); if (dosFrame) { down = true; send('keydown') } });
+        // отпускание, отмена касания или выход пальца за кнопку — клавиша отпущена (иначе она «залипла» бы в игре)
+        ['pointerup', 'pointercancel', 'pointerleave'].forEach(ev => b.addEventListener(ev, () => { if (down) { down = false; send('keyup') } }));
+        b.addEventListener('contextmenu', e => e.preventDefault())
+      });
+
+      // ----------------------------------------------------------------------
+      // СТУДИЯ .jsdos: собирает набор из обычного zip с игрой прямо в браузере (на сервер ничего не уходит).
+      // Набор .jsdos — это zip, в который добавлены два служебных файла:
+      //   .jsdos/dosbox.conf — настройки DOSBox и команды запуска (секция [autoexec])
+      //   .jsdos/jsdos.json  — версия формата
+      // Порядок: выбрать zip → из списка найденных .exe/.com/.bat выбрать запускаемый → «Проверить» (запуск тут же) или «Скачать .jsdos».
+      // Библиотека JSZip (assets/jsdos/jszip.min.js, лицензия MIT) подгружается только при первом выборе архива.
+      // ----------------------------------------------------------------------
+      const DOS_JSZIP = 'assets/jsdos/jszip.min.js';
+      const stZip = $('#szip'), stExe = $('#sexe'), stCyc = $('#scyc'), stTest = $('#stest'), stSave = $('#ssave'), stMsg = $('#smsg');
+
+      // stSrc — загруженный архив (объект JSZip); stName — имя исходного файла без расширения (так назовём результат);
+      // stMsgKey / stMsgN — ключ перевода и число для текущего сообщения (чтобы перевести его при смене языка); zipLib — загрузка JSZip
+      let stSrc = null, stName = 'game', stMsgKey = '', stMsgN = 0, zipLib = null;
+
+      // Сообщение под кнопками студии ({n} в тексте заменяется числом)
+      function stSay(k, n) { stMsgKey = k; stMsgN = n; stMsg.textContent = k ? t(k).replace('{n}', n) : '' }
+
+      // Показать панель студии вместо экрана (и наоборот). В студии нечего перезапускать, на весь экран выводить и нажимать пультом
+      function showStudio(on) {
+        $('#dstudio').hidden = !on;
+        dosScreen.hidden = on;
+        $('#dpad').hidden = on;
+        if (on) { $('#dsaves').hidden = true; $('#dnote').hidden = true }
+        $('#dreset').disabled = $('#dfull').disabled = $('#dmouse').disabled = on
+      }
+
+      // Сбросить студию (при закрытии окна): забыть архив и очистить поля
+      function studioReset() {
+        stSrc = null; stZip.value = '';
+        stExe.textContent = '';
+        stExe.disabled = stTest.disabled = stSave.disabled = true;
+        stSay('')
+      }
+
+      // Подгрузить JSZip один раз
+      function loadZipLib() {
+        if (window.JSZip) return Promise.resolve();
+        return zipLib || (zipLib = new Promise((ok, fail) => {
+          const sc = document.createElement('script');
+          sc.src = DOS_JSZIP; sc.onload = ok; sc.onerror = () => { zipLib = null; fail() };
+          document.head.append(sc)
+        }))
+      }
+
+      // Выбрали zip: читаем его и ищем запускаемые файлы
+      stZip.onchange = async () => {
+        const f = stZip.files[0];
+        if (!f) return;
+        stExe.disabled = stTest.disabled = stSave.disabled = true;
+        stSay('stRead');
+        try { await loadZipLib() } catch (e) { stSay('stLibErr'); return }
+        try { stSrc = await JSZip.loadAsync(f) } catch (e) { stSrc = null; stSay('stBad'); return }
+        stName = f.name.replace(/\.[^.]+$/, '') || 'game';
+        if (Object.keys(stSrc.files).some(n => n.startsWith('.jsdos/'))) { stSay('stHave'); return }
+        // запускаемые файлы: сначала лежащие ближе к корню архива, внутри уровня — по алфавиту
+        const list = Object.keys(stSrc.files)
+          .filter(n => !stSrc.files[n].dir && /\.(exe|com|bat)$/i.test(n))
+          .sort((a, b) => a.split('/').length - b.split('/').length || a.localeCompare(b));
+        if (!list.length) { stSay('stNoExe'); return }
+        stExe.textContent = '';
+        list.forEach(n => { const o = document.createElement('option'); o.value = o.textContent = n; stExe.append(o) });
+        stExe.disabled = stTest.disabled = stSave.disabled = false;
+        stSay('stFound', list.length)
+      };
+
+      // Текст dosbox.conf. Путь «папка/подпапка/GAME.EXE» превращается в команды «cd папка\подпапка» и «GAME.EXE»
+      function stConf(path) {
+        const parts = path.split('/'), file = parts.pop();
+        const lines = ['[sdl]', 'autolock=false', '[cpu]', 'core=auto', 'cycles=' + stCyc.value, '[autoexec]', '@echo off', 'mount c .', 'c:'];
+        if (parts.length) lines.push('cd ' + parts.join('\\'));
+        lines.push(file);
+        return lines.join('\n') + '\n'
+      }
+
+      // Собрать набор: копия исходного архива + два служебных файла
+      async function stBuildBundle() {
+        const z = new JSZip();
+        for (const n of Object.keys(stSrc.files)) {
+          const e = stSrc.files[n];
+          if (e.dir) z.folder(n); else z.file(n, await e.async('uint8array'))
+        }
+        z.file('.jsdos/dosbox.conf', stConf(stExe.value));
+        z.file('.jsdos/jsdos.json', '{"version":"8.xx"}');
+        return z.generateAsync({ type: 'blob', compression: 'DEFLATE' })
+      }
+
+      // «Проверить»: собранный набор запускаем как «файл с компьютера» (экран возвращается, в списке появляется 📁 имя.jsdos)
+      stTest.onclick = async () => {
+        stSay('stBuild');
+        const blob = await stBuildBundle();
+        if (dosBlob) URL.revokeObjectURL(dosBlob);
+        dosBlob = URL.createObjectURL(blob); dosFileName = stName + '.jsdos'; dosFileSize = 0; dosPick = 'f';
+        stSay('stTested');
+        relabelDos(); dosStart()
+      };
+
+      // «Скачать .jsdos»: отдаём собранный файл браузеру на скачивание
+      stSave.onclick = async () => {
+        stSay('stBuild');
+        const blob = await stBuildBundle();
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob); a.download = stName + '.jsdos';
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(a.href), 10000);
+        stSay('stSaved')
+      };
+
+      // ----------------------------------------------------------------------
+      // СОХРАНЕНИЯ. Всё, что игра записала на диск C: (её сейвы), эмулятор собирает в «набор изменений» и при следующем запуске
+      // накладывает поверх игры. Хранится набор в кэше браузера (IndexedDB этого сайта) — под ключом dosKey, поэтому сохранения
+      // привязаны к браузеру и устройству. Чтобы их не потерять и переносить, есть выгрузка в файл (.save) и загрузка обратно.
+      // Сам механизм (хранилище, события) — в assets/jsdos/player.html; тут — кнопки и уведомления.
+      //   • «Сохранить» — записать в кэш сейчас (кроме того, эмулятор сохраняет сам при выходе из полного экрана)
+      //   • «В файл» — сохранить и скачать файл;  «Из файла…» — положить сохранение из файла в кэш и перезапустить игру
+      //   • «Удалить сохранение» — стереть из кэша и перезапустить игру с чистого листа
+      // Про кэш посетителя предупреждает жёлтая плашка (#dnote) — один раз за сеанс при первом сохранении или загрузке.
+      // ----------------------------------------------------------------------
+      const dosNote = $('#dnote'), dosImpFile = $('#dimpf');
+
+      // Показать жёлтую плашку с текстом по ключу перевода (закрывается кнопкой OK)
+      function dosNotify(k) { $('#dnotet').textContent = t(k); dosNote.hidden = false; dosNoted = true }
+      $('#dnoteok').onclick = () => { dosNote.hidden = true; dosFocus() };
+
+      // Вызвать функцию страницы эмулятора (они описаны в конце player.html); null — если эмулятор не запущен
+      const dosCall = (name, ...a) => { try { return Promise.resolve(dosFrame.contentWindow[name](...a)) } catch (e) { return Promise.resolve(null) } };
+
+      // Сообщения от эмулятора: saved — сохранение записано в кэш, loaded — при запуске подхвачено сохранение из кэша
+      window.addEventListener('message', e => {
+        if (e.origin !== location.origin || !dosFrame || e.source !== dosFrame.contentWindow || !e.data) return;
+        if (e.data.dos === 'saved') { setStat('svSavedShort'); if (!dosNoted) dosNotify('svSaved') }
+        else if (e.data.dos === 'loaded' && !dosNoted) dosNotify('svLoaded')
+      });
+
+      // «Сохранить»
+      $('#dsave').onclick = async () => {
+        const ok = await dosCall('dosSaveNow');
+        if (!ok) setStat('svNone');
+        dosFocus()
+      };
+
+      // «В файл»: сохраняем, берём сохранение из кэша и отдаём браузеру на скачивание
+      $('#dexp').onclick = async () => {
+        await dosCall('dosSaveNow');
+        const bytes = await dosCall('dosExport');
+        if (!bytes) { setStat('svNoData'); return }
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(new Blob([bytes], { type: 'application/octet-stream' }));
+        a.download = (dosFileName || dosKey.replace(/^game:.*\//, '').replace(/\.[^.]*$/, '') || 'game').replace(/\.jsdos$/i, '') + '.save';
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(a.href), 10000);
+        setStat('svFile'); dosNotify('svFile')
+      };
+
+      // «Из файла…»: открываем выбор файла; сохранение кладём в кэш и перезапускаем игру, чтобы эмулятор его подхватил
+      $('#dimp').onclick = () => dosImpFile.click();
+      dosImpFile.onchange = async () => {
+        const f = dosImpFile.files[0];
+        dosImpFile.value = '';
+        if (!f || !dosFrame) return;
+        const b = new Uint8Array(await f.arrayBuffer());
+        if (b.length < 4 || b[0] !== 0x50 || b[1] !== 0x4B) { setStat('svBad'); return }   // файл сохранения — zip, он начинается с «PK»
+        await dosCall('dosImport', b);
+        dosStart();
+        setStat('svImported'); dosNotify('svImported')
+      };
+
+      // «Удалить сохранение»
+      $('#ddel').onclick = async () => {
+        if (!window.confirm(t('svConfirm'))) return;
+        await dosCall('dosDeleteSave');
+        dosStart();
+        setStat('svDeleted'); dosNotify('svDeleted')
+      };
+
+      // Клик по пустому месту окна (заголовок, поля) возвращает клавиатуру эмулятору; по кнопкам и списку — нет, им нужен свой фокус
+      dosWin.addEventListener('click', e => { if (dosFrame && !e.target.closest('select,button,input,a')) dosFocus() });
+
+
+      // ======================================================================
       // ГЛАВНЫЙ ЦИКЛ АНИМАЦИИ И ЗАПУСК САЙТА
       // ======================================================================
 
@@ -812,17 +1292,17 @@
       }
 
       // При изменении размера окна браузера:
-      //  — сразу пересчитываем отступ окон на мобильном и приводим окна в порядок: на узком экране сбрасываем «развёрнутость»
-      //    (кнопки разворота там нет, и окно застряло бы на весь экран поверх ярлыков), на широком — размещаем окна,
-      //    открытые на узком, и возвращаем в экран те, что оказались за его краем;
+      //  — сразу пересчитываем отступ окон на мобильном и приводим окна в порядок: на широком экране размещаем окна,
+      //    открытые на узком, и возвращаем в экран те, что оказались за его краем; на узком возвращаем в экран сдвинутые пальцем.
+      //    «Развёрнутость» не сбрасываем: на телефоне кнопка «□» есть, а размер окна браузера меняется при каждом
+      //    сворачивании адресной строки — окно с игрой не должно из-за этого сжиматься;
       //  — фон строим заново не на каждое событие (при перетаскивании края окна их десятки, а «выпекание» 60+ спрайтов
       //    дорогое), а один раз, когда размер перестал меняться
       let rt = 0;
       addEventListener('resize', () => {
         lay();
         wins.forEach(w => {
-          if (small()) w.classList.remove('max');
-          else if (w.classList.contains('open') && !w.classList.contains('min')) place(w)
+          if (w.classList.contains('open') && !w.classList.contains('min')) place(w)
         });
         clearTimeout(rt); rt = setTimeout(bgInit, 120)
       });

@@ -1,0 +1,169 @@
+<!doctype html>
+
+<!--
+  ============================================================================
+  player.html — страница с эмулятором DOS (js-dos 8, движок DOSBox).
+  ============================================================================
+  Зачем отдельная страница, а не код прямо в index.html:
+    • js-dos.css — это целый Tailwind + daisyUI со СВОИМИ глобальными правилами (.btn, .container, button, body ...).
+      В общей странице они бы перебили стили рабочего стола. В <iframe> стили полностью изолированы.
+    • js-dos перехватывает ВСЕ нажатия клавиш на странице, где работает. В <iframe> это происходит только
+      когда фокус на самом эмуляторе — остальной сайт (Esc, Pong, ярлыки) продолжает работать как обычно.
+
+  Страницу открывает script.js (раздел «MS-DOS»): ставит <iframe src="assets/jsdos/player.html?url=...">.
+  Параметры адреса:
+    ?url=<адрес .jsdos / .zip>   — запустить этот набор (бандл) с игрой или программой
+    (без параметров)             — пустой DOS: командная строка, диск C: пустой (см. dosbox.conf ниже)
+    &key=<имя>                   — ключ сохранений этой игры (по нему сохранения лежат в кэше браузера и находятся при следующем запуске)
+
+  Откуда берутся файлы библиотеки (лежат рядом, в этой же папке):
+    js-dos.js, js-dos.css   — плеер;   emulators/ — сам эмулятор (wasm), подгружается автоматически
+  Версия: js-dos 8.5.3 (лицензия GPL-2.0, взято из npm-пакета «js-dos»).
+  ============================================================================
+-->
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>MS-DOS</title>
+  <link rel="stylesheet" href="js-dos.css">
+  <style>
+    /* Чёрный экран на всю страницу (т.е. на всю область <iframe>), без прокрутки */
+    html,
+    body {
+      margin: 0;
+      height: 100%;
+      background: #000;
+      overflow: hidden;
+    }
+
+    /* Всплывающие сообщения самого js-dos («Сохранено в облаке» и т.п.) прячем: при сохранении они говорят про облако js-dos,
+       а у нас сохранения лежат в кэше браузера. Вместо них окно сайта показывает свои уведомления (см. раздел «Сохранения» в script.js).
+       Сообщения об ошибках (.alert-error) не трогаем */
+    .jsdos-rso .alert-success,
+    .jsdos-rso .alert-warning,
+    .jsdos-rso .top-10 .alert:not(.alert-error) {
+      display: none !important;
+    }
+
+    /* Контейнер плеера: js-dos сам растягивается на 100% его высоты */
+    #dos {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="dos"></div>
+
+  <script>
+    // js-dos при старте вызывает navigator.keyboard.lock(...) — «захват» клавиш Esc и W для полноэкранного режима.
+    // Внутри <iframe> браузер это запрещает (в консоли появлялась ошибка, хотя всё работало), поэтому вызов глушим.
+    // Захват Esc на весь экран включает окно сайта (script.js, кнопка «На весь экран»): там это разрешено
+    try { if (navigator.keyboard) navigator.keyboard.lock = () => Promise.resolve() } catch (e) { }
+  </script>
+  <script src="js-dos.js"></script>
+  <script>
+    (() => {
+      // Настройки dosbox для «пустого DOS» (когда игра не выбрана).
+      // [autoexec] — команды, которые выполняются при старте: подключаем диск C: и пишем приветствие.
+      // Свои игры запускаются из .jsdos-наборов — у них эти настройки лежат внутри набора (.jsdos/dosbox.conf)
+      const EMPTY_CONF = [
+        '[sdl]',
+        'autolock=false',
+        '[cpu]',
+        'core=auto',
+        'cycles=max',
+        '[autoexec]',
+        '@echo off',
+        'mount c .',
+        'c:',
+        'cls',
+        'echo.',
+        'echo   maasdam.online - MS-DOS',
+        'echo.',
+        'echo   Type HELP for the list of commands.',
+        'echo.'
+      ].join('\n');
+
+      const q = new URLSearchParams(location.search), url = q.get('url');
+
+      // Настройки плеера js-dos:
+      //   pathPrefix    — где лежит папка emulators/ (абсолютный адрес: эмулятор работает в Web Worker, ему относительные не подходят)
+      //   kiosk         — без боковой панели и меню js-dos: остаётся только экран (кнопки — в окне сайта)
+      //   autoStart     — запускать сразу, без кнопки «Start» (мы открываем страницу по клику посетителя)
+      //   backend       — движок: обычный DOSBox (лёгкий, ~1.5 МБ); backendLocked — не давать подменять его набором
+      //   noCloud       — не предлагать вход в облако js-dos
+      //   imageRendering — 'pixelated': чёткие пиксели без размытия при увеличении
+      const opts = {
+        pathPrefix: new URL('emulators/', location.href).href,
+        kiosk: true,
+        autoStart: true,
+        backend: 'dosbox',
+        backendLocked: true,
+        noCloud: true,
+        imageRendering: 'pixelated'
+      };
+      if (url) opts.url = url; else opts.dosboxConf = EMPTY_CONF;
+
+      // ------------------------------------------------------------------
+      // СОХРАНЕНИЯ. js-dos умеет складывать «изменения» (всё, что игра записала на диск C:) в отдельный набор и при следующем
+      // запуске накладывать его поверх игры. Хранилище мы подставляем свои — функции pull / push в параметре fsChanges:
+      //   push(ключ, байты) — вызывается, когда сохранение собрано; кладём в IndexedDB браузера («кэш» этого устройства)
+      //   pull(ключ)        — вызывается при запуске игры; отдаём то, что лежит в IndexedDB (или null, если сохранений нет)
+      //   urlToKey          — ключ сохранений берём из параметра ?key=..., а не из адреса набора (адрес файла с компьютера каждый раз новый)
+      // autoSave: true — js-dos сам сохраняет при выходе из полного экрана и т.п.; кнопка «Сохранить» в окне сайта делает то же вручную.
+      // Окно сайта узнаёт о событиях через postMessage (saved / loaded).
+      // ------------------------------------------------------------------
+      const saveKey = q.get('key') ? 'jsdos-save:' + q.get('key') : null;
+      const idb = () => new Promise((ok, fail) => {
+        const r = indexedDB.open('maasdam-dos', 1);
+        r.onupgradeneeded = () => r.result.createObjectStore('saves');
+        r.onsuccess = () => ok(r.result); r.onerror = () => fail(r.error)
+      });
+      // Ждём именно окончания транзакции (oncomplete), а не успеха запроса: окно сайта удаляет этот <iframe> сразу после ответа
+      // (перезапуск игры), и незавершённая запись при этом была бы отменена браузером
+      const idbDo = async (mode, f) => {
+        const db = await idb();
+        return new Promise((ok, fail) => {
+          const tx = db.transaction('saves', mode), r = f(tx.objectStore('saves'));
+          tx.oncomplete = () => ok(r.result); tx.onerror = tx.onabort = () => fail(tx.error)
+        })
+      };
+      const tell = what => { try { parent.postMessage({ dos: what }, location.origin) } catch (e) { } };
+      let waiter = null;   // ждёт ответа на «Сохранить» (см. dosSaveNow)
+
+      opts.autoSave = true;
+      opts.fsChanges = {
+        local: false,   // свои функции вместо встроенного хранилища js-dos
+        urlToKey: () => saveKey,
+        pull: async key => { const b = await idbDo('readonly', st => st.get(key)).catch(() => null); if (b) tell('loaded'); return b || null },
+        push: async (key, bytes) => { await idbDo('readwrite', st => st.put(bytes, key)); tell('saved'); if (waiter) { const w = waiter; waiter = null; w(true) } },
+        delete: async key => { await idbDo('readwrite', st => st.delete(key)) }
+      };
+
+      const player = Dos(document.getElementById('dos'), opts);
+
+      // Функции для окна сайта (страница одного с ним домена, поэтому script.js вызывает их напрямую):
+      //   dosPause(true/false) — поставить эмулятор на паузу (когда окно свёрнуто) / продолжить
+      window.dosPause = on => { try { player.setPaused(!!on) } catch (e) { } };
+
+      //   dosSaveNow()  — сохранить игру в кэш прямо сейчас. Возвращает true, если сохранение записано, false — если сохранять нечего.
+      //                   Запускаем то же событие, по которому js-dos делает автосохранение (pointerlockchange без захвата мыши)
+      //   dosExport()   — байты сохранения из кэша (для скачивания файлом) или null
+      //   dosImport(b)  — положить байты сохранения (из файла) в кэш;  dosDeleteSave() — удалить сохранение из кэша
+      window.dosSaveNow = () => new Promise(ok => {
+        waiter = ok;
+        setTimeout(() => { if (waiter === ok) { waiter = null; ok(false) } }, 4000);
+        document.dispatchEvent(new Event('pointerlockchange'))
+      });
+      window.dosExport = () => saveKey ? idbDo('readonly', st => st.get(saveKey)).then(b => b || null) : Promise.resolve(null);
+      window.dosImport = b => saveKey ? idbDo('readwrite', st => st.put(b, saveKey)) : Promise.reject(new Error('no key'));
+      window.dosDeleteSave = () => saveKey ? idbDo('readwrite', st => st.delete(saveKey)) : Promise.resolve();
+    })();
+  </script>
+</body>
+
+</html>

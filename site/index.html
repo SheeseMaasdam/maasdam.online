@@ -8,7 +8,8 @@
     index.html                  — этот файл: разметка страницы (окна, ярлыки, панель задач)
     style.css                   — все стили
     script.js                   — вся логика
-    assets/                     — картинки и данные фона (background.svg, background-holes.js, logo.png, discord.svg)
+    assets/                     — картинки и данные фона (background.svg, background-holes.js, logo.png, discord.svg),
+                                  assets/jsdos/ — эмулятор DOS (js-dos), assets/games/ — игры и программы для него (.jsdos)
 
   Структура этого файла:
     1. <head>   — метаданные страницы и подключение стилей (style.css)
@@ -16,7 +17,7 @@
                     • фоновый холст <canvas id="bg"> (анимация «живого сыра» по assets/background.svg)
                     • спрятанный SVG со значками (symbol)
                     • ярлыки рабочего стола (#icons)
-                    • окна (.win): «Обо мне», Minecraft, Discord, Telegram, «Контакты», Pong, «Предупреждение»
+                    • окна (.win): «Обо мне», Minecraft, Discord, Telegram, «Контакты», Pong, MS-DOS, «Предупреждение»
                     • меню «Пуск» (#start) и панель задач (#bar)
     3. внизу — подключение скриптов (assets/background-holes.js и script.js), а в script.js вся логика:
                     • словарь переводов RU/EN
@@ -24,6 +25,7 @@
                     • панель задач, меню «Пуск», часы, копирование в буфер обмена
                     • анимированный фон (лава-лампа из «дыр» сыра)
                     • мини-игра Pong
+                    • окно MS-DOS: эмулятор DOS (js-dos), работает во вложенной странице assets/jsdos/player.html
 
   Служебные data-атрибуты в разметке:
     data-open="id"  — у ярлыка: какое окно он открывает
@@ -46,7 +48,7 @@
   <meta name="description" content="Владимир «Сыр» Маасдам — визитка и игровые проекты">
   <!-- Значок вкладки (favicon) -->
   <link rel="icon" type="image/png" href="assets/logo.png">
-  <link rel="stylesheet" href="style.css?v=4">
+  <link rel="stylesheet" href="style.css?v=10">
 </head>
 
 <body>
@@ -80,6 +82,14 @@
       <rect x="3.5" y="5.5" width="25" height="21" fill="#000" stroke="#808080" />
       <path d="M16 7v18" stroke="#fff" stroke-dasharray="2 2" />
       <path d="M7 11h2v8H7zM23 13h2v8h-2zM15 15h2v2h-2z" fill="#fff" />
+    </symbol>
+
+    <!-- Значок MS-DOS: чёрное окно с синим заголовком и приглашением «>_» -->
+    <symbol id="i-dos" viewBox="0 0 32 32">
+      <rect x="3.5" y="5.5" width="25" height="21" fill="#000" stroke="#808080" />
+      <rect x="4" y="6" width="24" height="4" fill="#000080" />
+      <path d="M8 14l4 3-4 3" fill="none" stroke="#c0c0c0" stroke-width="2" />
+      <path d="M14 21.5h6" stroke="#c0c0c0" stroke-width="2" />
     </symbol>
 
     <!-- Значок Telegram: голубой круг с белым «бумажным самолётиком» -->
@@ -142,6 +152,12 @@
       <span>Pong</span>
     </button>
 
+    <!-- MS-DOS -> окно #dos (эмулятор DOS) -->
+    <button class="icon" data-open="dos">
+      <span class="ic"><svg><use href="#i-dos" /></svg></span>
+      <span>MS-DOS</span>
+    </button>
+
     <!-- Папки -> окно #folder (создаётся скриптом из дерева FS в script.js) -->
     <button class="icon" data-open="folder">
       <span class="ic"><svg><use href="#i-folder" /></svg></span>
@@ -166,7 +182,7 @@
       <span class="tt" data-t="tAbout">Обо мне.txt — Блокнот</span>
       <span class="tbb">
         <button data-act="min">_</button> <!-- свернуть -->
-        <button data-act="max_off">□</button> <!-- развернуть / вернуть (ИЗМЕНИТЬ DATA-ACT НА КОРРЕКТНЫЙ ЧТОБЫ СНОВА РАБОТАЛО!!!!!!!)--> 
+        <button data-act="max_off">□</button> <!-- развернуть / вернуть (ИЗМЕНИТЬ DATA-ACT НА КОРРЕКТНЫЙ ЧТОБЫ СНОВА РАБОТАЛО!!!!!!!)-->
         <button data-act="close">×</button> <!-- закрыть -->
       </span>
     </header>
@@ -301,6 +317,90 @@
     </div>
   </section>
 
+  <!-- Окно MS-DOS: эмулятор DOS (js-dos). Сам эмулятор живёт во вложенной странице assets/jsdos/player.html —
+       скрипт вставляет её <iframe> в #dscreen при первом открытии окна и убирает при закрытии.
+       Панель сверху: список программ (#dsel), «Открыть файл…» (свой .jsdos / .zip с компьютера),
+       «Перезапуск» и «На весь экран». Внизу — строка состояния (#dstat). Логика — в разделе «MS-DOS» script.js -->
+  <section class="win raised" id="dos" data-icon>
+    <header class="tb">
+      <span class="ti"></span>
+      <span class="tt" data-t="tDos">MS-DOS</span>
+      <span class="tbb">
+        <button data-act="min">_</button>
+        <button data-act="max">□</button>
+        <button data-act="close">×</button>
+      </span>
+    </header>
+    <div class="body">
+      <div class="dtool">
+        <select id="dsel" class="sunken"></select> <!-- варианты подставляет скрипт (см. DOS_GAMES) -->
+        <button class="btn" id="dopen" data-t="dosOpen">Открыть файл…</button>
+        <button class="btn" id="dreset" data-t="dosReset">Перезапуск</button>
+        <button class="btn" id="dfull" data-t="dosFull">На весь экран</button>
+        <button class="btn" id="dmouse" data-t="dosMouseOn">Мышь: вкл</button> <!-- «выкл» — мышь не доходит до игры (нужно для игр вроде Doom, где мышь вращает героя) -->
+        <input type="file" id="dfile" accept=".jsdos" hidden> <!-- спрятан: открывается кнопкой «Открыть файл…» -->
+      </div>
+      <!-- Сохранения игры (ряд виден, только когда запущена игра, не «пустой DOS» и не студия).
+           «Сохранить» — в кэш браузера; «В файл» / «Из файла…» — перенос сохранения файлом (между браузерами и устройствами);
+           «Удалить» — стереть сохранение из кэша. Логика — в разделе «MS-DOS» script.js (блок «Сохранения») -->
+      <div class="dtool" id="dsaves" hidden>
+        <button class="btn" id="dsave" data-t="dosSave">Сохранить</button>
+        <button class="btn" id="dexp" data-t="dosExp">В файл</button>
+        <button class="btn" id="dimp" data-t="dosImp">Из файла…</button>
+        <button class="btn" id="ddel" data-t="dosDel">Удалить сохранение</button>
+        <input type="file" id="dimpf" accept=".save" hidden> <!-- спрятан: открывается кнопкой «Из файла…» -->
+      </div>
+      <!-- Уведомление о сохранениях (жёлтая плашка, как подсказка в Windows): текст подставляет скрипт, «OK» закрывает -->
+      <div class="dnote" id="dnote" hidden>
+        <span id="dnotet"></span>
+        <button class="btn" id="dnoteok">OK</button>
+      </div>
+      <!-- Студия .jsdos: появляется вместо экрана, когда в списке выбран пункт «Студия .jsdos».
+           Берёт обычный zip с игрой и собирает из него набор .jsdos (всё в браузере, на сервер ничего не уходит).
+           Логика — в разделе «MS-DOS» script.js (блок «Студия») -->
+      <div id="dstudio" hidden>
+        <div>
+          <div class="lbl" data-t="stZip">1. Zip-архив с игрой</div>
+          <input type="file" id="szip" class="sunken" accept=".zip">
+        </div>
+        <div>
+          <div class="lbl" data-t="stExe">2. Что запускать</div>
+          <select id="sexe" class="sunken" disabled></select> <!-- варианты подставляет скрипт: .exe / .com / .bat из архива -->
+        </div>
+        <div>
+          <div class="lbl" data-t="stCyc">Скорость процессора (cycles)</div>
+          <select id="scyc" class="sunken">
+            <option value="auto">auto</option>
+            <option value="max">max</option>
+          </select>
+        </div>
+        <div class="dtool">
+          <button class="btn" id="stest" disabled data-t="stTest">Проверить</button>
+          <button class="btn" id="ssave" disabled data-t="stSave">Скачать .jsdos</button>
+        </div>
+        <p class="small" id="smsg"></p>
+      </div>
+      <div id="dscreen" class="sunken"></div> <!-- сюда вставляется <iframe> с эмулятором -->
+      <!-- Экранный пульт для телефонов (виден только на сенсорных экранах): стрелки, Enter, Esc, Space, Ctrl, Alt.
+           data-k — код клавиши (keyCode), data-l — 1 для левых Ctrl/Alt. Нажатия отправляет script.js прямо в эмулятор -->
+      <div class="dpad" id="dpad">
+        <button class="btn" data-k="27">Esc</button>
+        <button class="btn" data-k="38" aria-label="Up">▲</button>
+        <button class="btn" data-k="13">Enter</button>
+        <button class="btn" data-k="17" data-l="1">Ctrl</button>
+        <button class="btn" data-k="18" data-l="1">Alt</button>
+        <button class="btn" data-k="37" aria-label="Left">◀</button>
+        <button class="btn" data-k="40" aria-label="Down">▼</button>
+        <button class="btn" data-k="39" aria-label="Right">▶</button>
+        <button class="btn" data-k="32">Space</button>
+      </div>
+      <div id="dstat" class="dstat sunken"></div>
+      <p class="small center" data-t="dosHint">Клавиатура работает внутри экрана DOS (Esc — тоже). Свою игру можно открыть кнопкой «Открыть файл…» (.jsdos). Закрыть окно — кнопка ×.</p>
+      <!-- Подсказка только для сенсорных экранов (см. .dtouch в style.css) -->
+      <p class="small center dtouch" data-t="dosTouch">На телефоне нет клавиатуры для ввода текста — есть только кнопки выше. Касание экрана двигает мышь, быстрый тап — клик.</p>
+    </div>
+  </section>
+
   <!-- Окно «Предупреждение»: при загрузке открыто ТОЛЬКО оно (остальные окна открывает сам посетитель), сразу активное (класс act).
        Как настоящая системная ошибка, оно не закрывается насовсем: после × / OK / Esc скрипт возвращает его
        через 0,8 сек (см. ERR_DELAY и respawnErr в script.js).
@@ -354,6 +454,6 @@
        (обёрнута в самовызывающуюся функцию, чтобы переменные не попадали в глобальную область)
        ======================================================================== -->
 <script src="assets/background-holes.js"></script>
-<script src="script.js?v=4"></script>
+<script src="script.js?v=11"></script>
 </body>
 </html>
