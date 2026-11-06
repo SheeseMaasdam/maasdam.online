@@ -1,7 +1,7 @@
 # Автоматический деплой сайта maasdam.online на GitHub Pages.
 # Срабатывает при каждом push в ветку main (и вручную — кнопка "Run workflow" во вкладке Actions).
 # Сборки нет: сайт статический, поэтому в публикацию просто копируются нужные файлы из папки site/.
-# Кроме GitHub Pages сайт заливается на VDS (шаг «Deploy to VDS» ниже) — нужны секреты репозитория VDS_HOST, VDS_USER, VDS_SSH_KEY.
+# Кроме GitHub Pages сайт заливается на VDS (шаг «Deploy to VDS» ниже) — нужны секреты репозитория HOST, USERNAME, VDS_SSH_KEY.
 
 name: Deploy to GitHub Pages
 
@@ -42,11 +42,14 @@ jobs:
 
       - name: Deploy to VDS
         # Копируем готовую папку _site на сервер по SSH (rsync). Нужны секреты репозитория (Settings → Secrets and variables → Actions):
-        #   VDS_HOST    — адрес сервера (IP или maasdam.online)
-        #   VDS_USER    — пользователь на сервере, у которого есть право писать в папку сайта
-        #   VDS_SSH_KEY — ПРИВАТНЫЙ ключ этого пользователя (файл id_ed25519 целиком, вместе со строками BEGIN/END)
+        #   HOST        — адрес сервера (IP или maasdam.online), без https:// и без порта
+        #   USERNAME    — пользователь на сервере, у которого есть право писать в папку сайта (публичная часть ключа должна лежать
+        #                 в ~/.ssh/authorized_keys ИМЕННО этого пользователя)
+        #   VDS_SSH_KEY — ПРИВАТНЫЙ ключ (файл deploy_key целиком, вместе со строками BEGIN/END)
+        # (секрет PASSWORD от прежнего деплоя по паролю здесь не используется; когда SSH-деплой заработает, его можно удалить)
         # На сервере должен быть установлен rsync. Папку назначения (/var/www/astro-site/) поменяйте на ту, которую отдаёт nginx.
         # Старые копии не копятся: ключ --delete-after удаляет на сервере всё, чего больше нет в _site (сначала загружается новое,
+        # потом убирается лишнее — сайт не остаётся «пустым» посреди деплоя).
         # ОСТОРОЖНО: --delete стирает ВСЁ в папке назначения, чего нет в репозитории, включая чужие файлы. Папка /var/www/astro-site/
         # должна принадлежать только этому сайту. Папка .well-known/ (проверки сертификата Let's Encrypt) защищена исключением.
         # Если на сервере в этой папке лежит что-то ещё, что нужно сохранить, добавьте строку --exclude='имя' по образцу ниже.
@@ -59,12 +62,20 @@ jobs:
           VDS_USER: ${{ secrets.USERNAME }}
           VDS_SSH_KEY: ${{ secrets.VDS_SSH_KEY }}
         run: |
+          set -euo pipefail
+          # проверяем, что все три секрета заданы: если секрет не создан (или создан не в разделе «Secrets», а, например, в «Variables»),
+          # GitHub подставит пустую строку, и дальше команды падали бы с невнятным «exit code 1»
+          [ -n "$VDS_HOST" ] || { echo "::error::Секрет HOST не задан или пуст (Settings → Secrets and variables → Actions → Secrets)"; exit 1; }
+          [ -n "$VDS_USER" ] || { echo "::error::Секрет USERNAME не задан или пуст (Settings → Secrets and variables → Actions → Secrets)"; exit 1; }
+          [ -n "$VDS_SSH_KEY" ] || { echo "::error::Секрет VDS_SSH_KEY не задан или пуст (Settings → Secrets and variables → Actions → Secrets)"; exit 1; }
+          # защита: если вдруг сборка пустая (нет index.html), --delete стёр бы весь сайт на сервере — тогда останавливаемся
+          [ -f _site/index.html ] || { echo "::error::В папке _site нет index.html — проверьте шаг Prepare site files"; exit 1; }
           install -m 700 -d ~/.ssh
           printf '%s\n' "$VDS_SSH_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -H "$VDS_HOST" >> ~/.ssh/known_hosts
-          # защита: если вдруг сборка пустая (нет index.html), --delete стёр бы весь сайт на сервере — тогда останавливаемся
-          test -f _site/index.html
+          # отпечаток сервера (порт 22). Если пусто — сервер не ответил: неверный VDS_HOST, закрыт порт 22 или SSH на другом порту
+          ssh-keyscan -T 15 -H "$VDS_HOST" >> ~/.ssh/known_hosts 2>/dev/null || true
+          [ -s ~/.ssh/known_hosts ] || { echo "::error::Сервер $VDS_HOST не ответил по SSH (порт 22). Проверьте секрет HOST, firewall и порт SSH"; exit 1; }
           rsync -rlz --chmod=D755,F644 --delete-after --exclude='.well-known/' -e "ssh -i ~/.ssh/deploy_key" _site/ "$VDS_USER@$VDS_HOST:/var/www/astro-site/"
 
       - name: Setup Pages
