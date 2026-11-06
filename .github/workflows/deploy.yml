@@ -1,4 +1,3 @@
-```yaml
 # Автоматический деплой maasdam.online на GitHub Pages и VDS.
 # Запускается при каждом push в main или вручную через Actions.
 
@@ -47,4 +46,45 @@ jobs:
       # Деплой сайта на VDS
       - name: Deploy to VDS
         env:
-          VDS_HOST:
+          VDS_HOST: ${{ secrets.VDS_HOST }}
+          VDS_USER: ${{ secrets.VDS_USER }}
+          VDS_SSH_KEY: ${{ secrets.VDS_SSH_KEY }}
+
+        run: |
+          # Создаём SSH-директорию
+          mkdir -p "$HOME/.ssh"
+          chmod 700 "$HOME/.ssh"
+
+          # Записываем приватный SSH-ключ
+          printf '%s\n' "$VDS_SSH_KEY" > "$HOME/.ssh/deploy_key"
+          chmod 600 "$HOME/.ssh/deploy_key"
+
+          # Добавляем сервер в список известных хостов
+          ssh-keyscan -H "$VDS_HOST" >> "$HOME/.ssh/known_hosts"
+
+          # Проверяем, что сайт подготовлен
+          test -f _site/index.html
+
+          # Загружаем файлы на сервер
+          rsync -rlz \
+            --chmod=D755,F644 \
+            --delete-after \
+            --exclude='.well-known/' \
+            -e "ssh -i $HOME/.ssh/deploy_key" \
+            _site/ "$VDS_USER@$VDS_HOST:/var/www/astro-site/"
+
+      # Настраиваем GitHub Pages
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      # Загружаем артефакт сайта
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      # Публикуем сайт на GitHub Pages
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+```
