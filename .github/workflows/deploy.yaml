@@ -1,43 +1,52 @@
-name: Deploy site
+# Автоматический деплой сайта maasdam.online на GitHub Pages.
+# Срабатывает при каждом push в ветку main (и вручную — кнопка "Run workflow" во вкладке Actions).
+# Сборки нет: сайт статический, поэтому в публикацию просто копируются нужные файлы.
+
+name: Deploy to GitHub Pages
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   workflow_dispatch:
+
+# Права, нужные для публикации на Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Одновременно идёт только один деплой; новый заменяет ожидающий, а уже идущий не прерывается
+concurrency:
+  group: pages
+  cancel-in-progress: false
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      # Сборки нет: сайт — обычные статичные файлы.
-      # Находим папку с index.html (корень или подпапка, например site/)
-      # и собираем в _site только нужные файлы — без .DS_Store, deploy.yaml и т.п.
       - name: Prepare site files
+        # Копируем только то, что нужно сайту (без .git, .DS_Store, __MACOSX и т.п.)
         run: |
-          INDEX=$(find . -name index.html -not -path './.git/*' -not -path './_site/*' -not -path '*/__MACOSX/*' | head -n 1)
-          if [ -z "$INDEX" ]; then
-            echo "::error::index.html не найден в репозитории"
-            exit 1
-          fi
-          SRC=$(dirname "$INDEX")
-          echo "Папка сайта: $SRC"
           mkdir _site
-          cp "$SRC/index.html" "$SRC/style.css" "$SRC/script.js" _site/
-          cp -r "$SRC/assets" _site/assets
+          cp index.html style.css _site/
+          cp -r scripts _site/scripts
+          cp -r assets _site/assets
           find _site -name '.DS_Store' -delete
 
-      - name: Deploy to VDS
-        uses: appleboy/scp-action@v0.1.7
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
-          source: "_site/*"
-          target: "/var/www/astro-site"
-          strip_components: 1
-          rm_target: true
-          overwrite: true
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
