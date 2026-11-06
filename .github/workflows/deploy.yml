@@ -1,3 +1,8 @@
+# Автоматический деплой сайта maasdam.online на GitHub Pages.
+# Срабатывает при каждом push в ветку main (и вручную — кнопка "Run workflow" во вкладке Actions).
+# Сборки нет: сайт статический, поэтому в публикацию просто копируются нужные файлы из папки site/.
+# Кроме GitHub Pages сайт заливается на VDS (шаг «Deploy to VDS» ниже) — нужны секреты репозитория VDS_HOST, VDS_USER, VDS_SSH_KEY.
+
 name: Deploy to GitHub Pages
 
 on:
@@ -5,11 +10,13 @@ on:
     branches: [main]
   workflow_dispatch:
 
+# Права, нужные для публикации на Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
+# Одновременно идёт только один деплой; новый заменяет ожидающий, а уже идущий не прерывается
 concurrency:
   group: pages
   cancel-in-progress: false
@@ -17,45 +24,49 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Prepare site files
+        # Копируем только то, что нужно сайту из папки site/ (остальные файлы корня репозитория не публикуются)
         run: |
-          mkdir -p _site
+          mkdir _site
           cp site/index.html site/style.css _site/
           cp -r site/scripts _site/scripts
           cp -r site/assets _site/assets
           find _site -name '.DS_Store' -delete
 
       - name: Deploy to VDS
+        # Копируем готовую папку _site на сервер по SSH (rsync). Нужны секреты репозитория (Settings → Secrets and variables → Actions):
+        #   VDS_HOST    — адрес сервера (IP или maasdam.online)
+        #   VDS_USER    — пользователь на сервере, у которого есть право писать в папку сайта
+        #   VDS_SSH_KEY — ПРИВАТНЫЙ ключ этого пользователя (файл id_ed25519 целиком, вместе со строками BEGIN/END)
+        # На сервере должен быть установлен rsync. Папку назначения (/var/www/astro-site/) поменяйте на ту, которую отдаёт nginx.
+        # Старые копии не копятся: ключ --delete-after удаляет на сервере всё, чего больше нет в _site (сначала загружается новое,
+        # потом убирается лишнее — сайт не остаётся «пустым» посреди деплоя).
+        # ОСТОРОЖНО: --delete стирает ВСЁ в папке назначения, чего нет в репозитории, включая чужие файлы. Папка /var/www/astro-site/
+        # должна принадлежать только этому сайту. Папка .well-known/ (проверки сертификата Let's Encrypt) защищена исключением.
+        # Если на сервере в этой папке лежит что-то ещё, что нужно сохранить, добавьте строку --exclude='имя' по образцу ниже.
+        # Перед первым запуском можно посмотреть, что будет удалено (ничего не меняет, только показывает; строки «*deleting ...»).
+        # Выполнять у себя на компьютере из папки с файлами сайта (index.html, style.css, scripts/, assets/):
+        #   rsync -rni --delete-after --exclude='.well-known/' ./ ПОЛЬЗОВАТЕЛЬ@СЕРВЕР:/var/www/astro-site/
+        # --chmod задаёт права, чтобы nginx мог читать файлы (папки 755, файлы 644)
         env:
           VDS_HOST: ${{ secrets.VDS_HOST }}
           VDS_USER: ${{ secrets.VDS_USER }}
           VDS_SSH_KEY: ${{ secrets.VDS_SSH_KEY }}
         run: |
-          mkdir -p "$HOME/.ssh"
-          chmod 700 "$HOME/.ssh"
-
-          printf '%s\n' "$VDS_SSH_KEY" > "$HOME/.ssh/deploy_key"
-          chmod 600 "$HOME/.ssh/deploy_key"
-
-          ssh-keyscan -H "$VDS_HOST" >> "$HOME/.ssh/known_hosts"
-
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$VDS_SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "$VDS_HOST" >> ~/.ssh/known_hosts
+          # защита: если вдруг сборка пустая (нет index.html), --delete стёр бы весь сайт на сервере — тогда останавливаемся
           test -f _site/index.html
-
-          rsync -rlz \
-            --chmod=D755,F644 \
-            --delete-after \
-            --exclude='.well-known/' \
-            -e "ssh -i $HOME/.ssh/deploy_key" \
-            _site/ "$VDS_USER@$VDS_HOST:/var/www/astro-site/"
+          rsync -rlz --chmod=D755,F644 --delete-after --exclude='.well-known/' -e "ssh -i ~/.ssh/deploy_key" _site/ "$VDS_USER@$VDS_HOST:/var/www/astro-site/"
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -67,4 +78,4 @@ jobs:
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v4\
