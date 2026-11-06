@@ -226,8 +226,15 @@
       width: 460px;
     }
 
-    #err {
+    #err,
+    #clk {
       width: 330px;
+    }
+
+    /* Часы в трее — кликабельны; tabular-nums, чтобы ширина не прыгала при смене цифр */
+    #clock {
+      cursor: pointer;
+      font-variant-numeric: tabular-nums;
     }
 
     /* Заголовок окна (title bar): синий градиент, белый жирный текст.
@@ -648,10 +655,6 @@
         flex-basis: 90px;
       }
 
-      /* Часы на узком экране скрыты — не хватает места */
-      #tray #clock {
-        display: none;
-      }
     }
 
     /* Сенсорные экраны (основной указатель — палец): всё делаем крупнее */
@@ -758,7 +761,10 @@ button,
     }
 
     /* Развёрнутое окно — на всю ширину экрана. Правило с id (#dos) сильнее, чем .win.max, поэтому ширину возвращаем отдельно */
-    #dos.max {
+    #dos.max,
+    #about.max,
+    #pong.max,
+    #snake.max {
       width: 100vw;
     }
 
@@ -1008,7 +1014,7 @@ button,
 }
 #snake .snake-overlay-card h2 {
     margin:9px 0;
-    -size:clamp(25px,7vw,38px);
+    font-size:clamp(25px,7vw,38px);
     line-height:1;
     letter-spacing:2px;
     color:#183e24;
