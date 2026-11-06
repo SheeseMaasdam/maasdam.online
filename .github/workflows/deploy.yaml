@@ -1,39 +1,37 @@
-# Автоматический деплой сайта на Cloudflare Pages из ПРИВАТНОГО репозитория (бесплатно).
+# Автоматический деплой сайта maasdam.online на GitHub Pages.
 # Срабатывает при каждом push в ветку main (и вручную — кнопка "Run workflow" во вкладке Actions).
-# Сборки нет: сайт статический, в публикацию копируются только нужные файлы из папки site/.
-#
-# Что нужно настроить один раз (подробно — в README.md):
-#   1. На Cloudflare создать проект Pages с типом «Direct Upload» и именем из PROJECT_NAME ниже.
-#   2. В репозитории: Settings → Secrets and variables → Actions → добавить секреты
-#      CLOUDFLARE_API_TOKEN (права «Cloudflare Pages: Edit») и CLOUDFLARE_ACCOUNT_ID.
+# Сборки нет: сайт статический, поэтому в публикацию просто копируются нужные файлы из папки site/.
 
-name: Deploy to Cloudflare Pages
+name: Deploy to GitHub Pages
 
 on:
   push:
     branches: [main]
   workflow_dispatch:
 
+# Права, нужные для публикации на Pages
 permissions:
   contents: read
+  pages: write
+  id-token: write
 
 # Одновременно идёт только один деплой; новый заменяет ожидающий, а уже идущий не прерывается
 concurrency:
-  group: deploy
+  group: pages
   cancel-in-progress: false
-
-env:
-  PROJECT_NAME: maasdam-site   # имя проекта Pages на Cloudflare — замените на своё
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Prepare site files
-        # Копируем только то, что нужно сайту (папка site/; остальные файлы корня репозитория не публикуются)
+        # Копируем только то, что нужно сайту из папки site/ (остальные файлы корня репозитория не публикуются)
         run: |
           mkdir _site
           cp site/index.html site/style.css _site/
@@ -41,9 +39,14 @@ jobs:
           cp -r site/assets _site/assets
           find _site -name '.DS_Store' -delete
 
-      - name: Deploy to Cloudflare Pages
-        uses: cloudflare/wrangler-action@v3
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy _site --project-name=${{ env.PROJECT_NAME }} --branch=main
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
