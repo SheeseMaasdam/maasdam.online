@@ -55,8 +55,8 @@ jobs:
         #   rsync -rni --delete-after --exclude='.well-known/' ./ ПОЛЬЗОВАТЕЛЬ@СЕРВЕР:/var/www/astro-site/
         # --chmod задаёт права, чтобы nginx мог читать файлы (папки 755, файлы 644)
         env:
-          VDS_HOST: ${{ secrets.VDS_HOST }}
-          VDS_USER: ${{ secrets.VDS_USER }}
+          VDS_HOST: ${{ secrets.HOST }}
+          VDS_USER: ${{ secrets.USERNAME }}
           VDS_SSH_KEY: ${{ secrets.VDS_SSH_KEY }}
         run: |
           install -m 700 -d ~/.ssh
